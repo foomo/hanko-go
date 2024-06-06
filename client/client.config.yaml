@@ -1,0 +1,4 @@
+# https://github.com/deepmap/oapi-codegen/blob/ab90f1927bc5ec3e29af216d4298fbb4780ae36d/pkg/codegen/configuration.go#L24
+package: client
+compatibility:
+  always-prefix-enum-values: true
