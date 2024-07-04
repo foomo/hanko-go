@@ -1,4 +1,4 @@
-Unfortunetly the provided openapi spec is not valid with oapi-codegen. The following error is thrown:
+Unfortunately the provided openapi spec is not valid with oapi-codegen. The following error is thrown:
 
 ```bash
 error loading swagger spec in client.yaml

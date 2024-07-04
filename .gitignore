@@ -1,0 +1,21 @@
+.*
+*.log
+*.out
+/bin/
+/tmp/
+
+## Git
+!.gitkeep
+!.gitignore
+
+## GitHub
+!.github/
+
+## Editorconfig
+!.editorconfig
+
+## Golang
+go.work
+go.work.sum
+!.golangci.yml
+!.goreleaser.yml
