@@ -1,9 +1,9 @@
-project_name: keel
+project_name: hanko-go
 
 release:
   github:
     owner: foomo
-    name: keel
+    name: hanko-go
   prerelease: auto
 
 builds:
