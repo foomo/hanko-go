@@ -7,7 +7,7 @@ export BIN_DIR=$(shell pwd)/bin
 export TEMP_DIR=$(shell pwd)/tmp
 export PATH=${BIN_DIR}:$(shell echo $$PATH)
 
-OAPI_CODEGEN_VERSION:=1.12.4
+OAPI_CODEGEN_VERSION:=2.3.0
 
 # --- Targets -----------------------------------------------------------------
 

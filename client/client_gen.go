@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepmap/oapi-codegen/pkg/runtime"
-	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
+	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 const (
@@ -444,8 +444,8 @@ type GetSamlAuthParams struct {
 
 // PostSamlCallbackFormdataBody defines parameters for PostSamlCallback.
 type PostSamlCallbackFormdataBody struct {
-	RelayState   *string `json:"RelayState,omitempty"`
-	SAMLResponse *string `json:"SAMLResponse,omitempty"`
+	RelayState   *string `form:"RelayState,omitempty" json:"RelayState,omitempty"`
+	SAMLResponse *string `form:"SAMLResponse,omitempty" json:"SAMLResponse,omitempty"`
 }
 
 // GetSamlMetadataParams defines parameters for GetSamlMetadata.
@@ -648,7 +648,7 @@ type ClientInterface interface {
 	// ListEmails request
 	ListEmails(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateEmail request with any body
+	// CreateEmailWithBody request with any body
 	CreateEmailWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateEmail(ctx context.Context, body CreateEmailJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -665,22 +665,22 @@ type ClientInterface interface {
 	// IsUserAuthorized request
 	IsUserAuthorized(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PasscodeFinal request with any body
+	// PasscodeFinalWithBody request with any body
 	PasscodeFinalWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PasscodeFinal(ctx context.Context, body PasscodeFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PasscodeInit request with any body
+	// PasscodeInitWithBody request with any body
 	PasscodeInitWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PasscodeInit(ctx context.Context, body PasscodeInitJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// Password request with any body
+	// PasswordWithBody request with any body
 	PasswordWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	Password(ctx context.Context, body PasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PasswordLogin request with any body
+	// PasswordLoginWithBody request with any body
 	PasswordLoginWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PasswordLogin(ctx context.Context, body PasswordLoginJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -688,7 +688,7 @@ type ClientInterface interface {
 	// GetSamlAuth request
 	GetSamlAuth(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostSamlCallback request with any body
+	// PostSamlCallbackWithBody request with any body
 	PostSamlCallbackWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PostSamlCallbackWithFormdataBody(ctx context.Context, body PostSamlCallbackFormdataRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -705,7 +705,7 @@ type ClientInterface interface {
 	// ThirdPartyCallback request
 	ThirdPartyCallback(ctx context.Context, params *ThirdPartyCallbackParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// Token request with any body
+	// TokenWithBody request with any body
 	TokenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	Token(ctx context.Context, body TokenJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -713,12 +713,12 @@ type ClientInterface interface {
 	// DeleteUser request
 	DeleteUser(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetUserId request with any body
+	// GetUserIdWithBody request with any body
 	GetUserIdWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	GetUserId(ctx context.Context, body GetUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateUser request with any body
+	// CreateUserWithBody request with any body
 	CreateUserWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateUser(ctx context.Context, body CreateUserJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -732,22 +732,22 @@ type ClientInterface interface {
 	// DeleteCredential request
 	DeleteCredential(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateCredential request with any body
+	// UpdateCredentialWithBody request with any body
 	UpdateCredentialWithBody(ctx context.Context, id UUID4, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	UpdateCredential(ctx context.Context, id UUID4, body UpdateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// WebauthnLoginFinal request with any body
+	// WebauthnLoginFinalWithBody request with any body
 	WebauthnLoginFinalWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	WebauthnLoginFinal(ctx context.Context, body WebauthnLoginFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// WebauthnLoginInit request with any body
+	// WebauthnLoginInitWithBody request with any body
 	WebauthnLoginInitWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	WebauthnLoginInit(ctx context.Context, body WebauthnLoginInitJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// WebauthnRegFinal request with any body
+	// WebauthnRegFinalWithBody request with any body
 	WebauthnRegFinalWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	WebauthnRegFinal(ctx context.Context, body WebauthnRegFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1733,33 +1733,35 @@ func NewGetSamlAuthRequest(server string, params *GetSamlAuthParams) (*http.Requ
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
 			}
 		}
-	}
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "redirect_to", runtime.ParamLocationQuery, params.RedirectTo); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "redirect_to", runtime.ParamLocationQuery, params.RedirectTo); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
 			}
 		}
-	}
 
-	queryURL.RawQuery = queryValues.Encode()
+		queryURL.RawQuery = queryValues.Encode()
+	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -1828,23 +1830,10 @@ func NewGetSamlMetadataRequest(server string, params *GetSamlMetadataParams) (*h
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
-			}
-		}
-	}
-
-	if params.CertOnly != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "cert_only", runtime.ParamLocationQuery, *params.CertOnly); err != nil {
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
 			return nil, err
 		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
 			return nil, err
@@ -1856,9 +1845,24 @@ func NewGetSamlMetadataRequest(server string, params *GetSamlMetadataParams) (*h
 			}
 		}
 
-	}
+		if params.CertOnly != nil {
 
-	queryURL.RawQuery = queryValues.Encode()
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "cert_only", runtime.ParamLocationQuery, *params.CertOnly); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -1887,21 +1891,23 @@ func NewGetSamlProviderRequest(server string, params *GetSamlProviderParams) (*h
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
 			}
 		}
-	}
 
-	queryURL.RawQuery = queryValues.Encode()
+		queryURL.RawQuery = queryValues.Encode()
+	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -1930,33 +1936,35 @@ func NewThirdPartyAuthRequest(server string, params *ThirdPartyAuthParams) (*htt
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "provider", runtime.ParamLocationQuery, params.Provider); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "provider", runtime.ParamLocationQuery, params.Provider); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
 			}
 		}
-	}
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "redirect_to", runtime.ParamLocationQuery, params.RedirectTo); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "redirect_to", runtime.ParamLocationQuery, params.RedirectTo); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
 			}
 		}
-	}
 
-	queryURL.RawQuery = queryValues.Encode()
+		queryURL.RawQuery = queryValues.Encode()
+	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -1985,11 +1993,26 @@ func NewThirdPartyCallbackRequest(server string, params *ThirdPartyCallbackParam
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if params.Code != nil {
+		if params.Code != nil {
 
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "code", runtime.ParamLocationQuery, *params.Code); err != nil {
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "code", runtime.ParamLocationQuery, *params.Code); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "state", runtime.ParamLocationQuery, params.State); err != nil {
 			return nil, err
 		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
 			return nil, err
@@ -2001,53 +2024,40 @@ func NewThirdPartyCallbackRequest(server string, params *ThirdPartyCallbackParam
 			}
 		}
 
-	}
+		if params.Error != nil {
 
-	if queryFrag, err := runtime.StyleParamWithLocation("form", true, "state", runtime.ParamLocationQuery, params.State); err != nil {
-		return nil, err
-	} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-		return nil, err
-	} else {
-		for k, v := range parsed {
-			for _, v2 := range v {
-				queryValues.Add(k, v2)
-			}
-		}
-	}
-
-	if params.Error != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "error", runtime.ParamLocationQuery, *params.Error); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "error", runtime.ParamLocationQuery, *params.Error); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.ErrorDescription != nil {
 
-	if params.ErrorDescription != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "error_description", runtime.ParamLocationQuery, *params.ErrorDescription); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "error_description", runtime.ParamLocationQuery, *params.ErrorDescription); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
+		queryURL.RawQuery = queryValues.Encode()
 	}
-
-	queryURL.RawQuery = queryValues.Encode()
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -2536,123 +2546,123 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// Status request
+	// StatusWithResponse request
 	StatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*StatusResponse, error)
 
-	// GetConfig request
+	// GetConfigWithResponse request
 	GetConfigWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetConfigResponse, error)
 
-	// GetJwks request
+	// GetJwksWithResponse request
 	GetJwksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetJwksResponse, error)
 
-	// ListEmails request
+	// ListEmailsWithResponse request
 	ListEmailsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListEmailsResponse, error)
 
-	// CreateEmail request with any body
+	// CreateEmailWithBodyWithResponse request with any body
 	CreateEmailWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateEmailResponse, error)
 
 	CreateEmailWithResponse(ctx context.Context, body CreateEmailJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateEmailResponse, error)
 
-	// DeleteEmail request
+	// DeleteEmailWithResponse request
 	DeleteEmailWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*DeleteEmailResponse, error)
 
-	// SetPrimaryEmail request
+	// SetPrimaryEmailWithResponse request
 	SetPrimaryEmailWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*SetPrimaryEmailResponse, error)
 
-	// Logout request
+	// LogoutWithResponse request
 	LogoutWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*LogoutResponse, error)
 
-	// IsUserAuthorized request
+	// IsUserAuthorizedWithResponse request
 	IsUserAuthorizedWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*IsUserAuthorizedResponse, error)
 
-	// PasscodeFinal request with any body
+	// PasscodeFinalWithBodyWithResponse request with any body
 	PasscodeFinalWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PasscodeFinalResponse, error)
 
 	PasscodeFinalWithResponse(ctx context.Context, body PasscodeFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*PasscodeFinalResponse, error)
 
-	// PasscodeInit request with any body
+	// PasscodeInitWithBodyWithResponse request with any body
 	PasscodeInitWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PasscodeInitResponse, error)
 
 	PasscodeInitWithResponse(ctx context.Context, body PasscodeInitJSONRequestBody, reqEditors ...RequestEditorFn) (*PasscodeInitResponse, error)
 
-	// Password request with any body
+	// PasswordWithBodyWithResponse request with any body
 	PasswordWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PasswordResponse, error)
 
 	PasswordWithResponse(ctx context.Context, body PasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*PasswordResponse, error)
 
-	// PasswordLogin request with any body
+	// PasswordLoginWithBodyWithResponse request with any body
 	PasswordLoginWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PasswordLoginResponse, error)
 
 	PasswordLoginWithResponse(ctx context.Context, body PasswordLoginJSONRequestBody, reqEditors ...RequestEditorFn) (*PasswordLoginResponse, error)
 
-	// GetSamlAuth request
+	// GetSamlAuthWithResponse request
 	GetSamlAuthWithResponse(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*GetSamlAuthResponse, error)
 
-	// PostSamlCallback request with any body
+	// PostSamlCallbackWithBodyWithResponse request with any body
 	PostSamlCallbackWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSamlCallbackResponse, error)
 
 	PostSamlCallbackWithFormdataBodyWithResponse(ctx context.Context, body PostSamlCallbackFormdataRequestBody, reqEditors ...RequestEditorFn) (*PostSamlCallbackResponse, error)
 
-	// GetSamlMetadata request
+	// GetSamlMetadataWithResponse request
 	GetSamlMetadataWithResponse(ctx context.Context, params *GetSamlMetadataParams, reqEditors ...RequestEditorFn) (*GetSamlMetadataResponse, error)
 
-	// GetSamlProvider request
+	// GetSamlProviderWithResponse request
 	GetSamlProviderWithResponse(ctx context.Context, params *GetSamlProviderParams, reqEditors ...RequestEditorFn) (*GetSamlProviderResponse, error)
 
-	// ThirdPartyAuth request
+	// ThirdPartyAuthWithResponse request
 	ThirdPartyAuthWithResponse(ctx context.Context, params *ThirdPartyAuthParams, reqEditors ...RequestEditorFn) (*ThirdPartyAuthResponse, error)
 
-	// ThirdPartyCallback request
+	// ThirdPartyCallbackWithResponse request
 	ThirdPartyCallbackWithResponse(ctx context.Context, params *ThirdPartyCallbackParams, reqEditors ...RequestEditorFn) (*ThirdPartyCallbackResponse, error)
 
-	// Token request with any body
+	// TokenWithBodyWithResponse request with any body
 	TokenWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*TokenResponse, error)
 
 	TokenWithResponse(ctx context.Context, body TokenJSONRequestBody, reqEditors ...RequestEditorFn) (*TokenResponse, error)
 
-	// DeleteUser request
+	// DeleteUserWithResponse request
 	DeleteUserWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*DeleteUserResponse, error)
 
-	// GetUserId request with any body
+	// GetUserIdWithBodyWithResponse request with any body
 	GetUserIdWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*GetUserIdResponse, error)
 
 	GetUserIdWithResponse(ctx context.Context, body GetUserIdJSONRequestBody, reqEditors ...RequestEditorFn) (*GetUserIdResponse, error)
 
-	// CreateUser request with any body
+	// CreateUserWithBodyWithResponse request with any body
 	CreateUserWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateUserResponse, error)
 
 	CreateUserWithResponse(ctx context.Context, body CreateUserJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateUserResponse, error)
 
-	// ListUser request
+	// ListUserWithResponse request
 	ListUserWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*ListUserResponse, error)
 
-	// ListCredentials request
+	// ListCredentialsWithResponse request
 	ListCredentialsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCredentialsResponse, error)
 
-	// DeleteCredential request
+	// DeleteCredentialWithResponse request
 	DeleteCredentialWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*DeleteCredentialResponse, error)
 
-	// UpdateCredential request with any body
+	// UpdateCredentialWithBodyWithResponse request with any body
 	UpdateCredentialWithBodyWithResponse(ctx context.Context, id UUID4, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCredentialResponse, error)
 
 	UpdateCredentialWithResponse(ctx context.Context, id UUID4, body UpdateCredentialJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCredentialResponse, error)
 
-	// WebauthnLoginFinal request with any body
+	// WebauthnLoginFinalWithBodyWithResponse request with any body
 	WebauthnLoginFinalWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*WebauthnLoginFinalResponse, error)
 
 	WebauthnLoginFinalWithResponse(ctx context.Context, body WebauthnLoginFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*WebauthnLoginFinalResponse, error)
 
-	// WebauthnLoginInit request with any body
+	// WebauthnLoginInitWithBodyWithResponse request with any body
 	WebauthnLoginInitWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*WebauthnLoginInitResponse, error)
 
 	WebauthnLoginInitWithResponse(ctx context.Context, body WebauthnLoginInitJSONRequestBody, reqEditors ...RequestEditorFn) (*WebauthnLoginInitResponse, error)
 
-	// WebauthnRegFinal request with any body
+	// WebauthnRegFinalWithBodyWithResponse request with any body
 	WebauthnRegFinalWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*WebauthnRegFinalResponse, error)
 
 	WebauthnRegFinalWithResponse(ctx context.Context, body WebauthnRegFinalJSONRequestBody, reqEditors ...RequestEditorFn) (*WebauthnRegFinalResponse, error)
 
-	// WebauthnRegInit request
+	// WebauthnRegInitWithResponse request
 	WebauthnRegInitWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*WebauthnRegInitResponse, error)
 }
 
@@ -2703,7 +2713,7 @@ type GetJwksResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *JSONWebKeySet
-	JSON500      *Error
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2726,8 +2736,8 @@ type ListEmailsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *Emails
-	JSON401      *Error
-	JSON500      *Error
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2749,9 +2759,9 @@ func (r ListEmailsResponse) StatusCode() int {
 type CreateEmailResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2773,9 +2783,9 @@ func (r CreateEmailResponse) StatusCode() int {
 type DeleteEmailResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON401      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON401      *Unauthorized
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2797,9 +2807,9 @@ func (r DeleteEmailResponse) StatusCode() int {
 type SetPrimaryEmailResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON401      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2821,8 +2831,8 @@ func (r SetPrimaryEmailResponse) StatusCode() int {
 type LogoutResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON401      *Error
-	JSON500      *Error
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2848,9 +2858,9 @@ type IsUserAuthorizedResponse struct {
 		// Id The id of the current user
 		Id *UUID4 `json:"id,omitempty"`
 	}
-	JSON400 *Error
-	JSON401 *Error
-	JSON500 *Error
+	JSON400 *BadRequest
+	JSON401 *Unauthorized
+	JSON500 *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2873,12 +2883,12 @@ type PasscodeFinalResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *Passcode
-	JSON400      *Error
-	JSON401      *Error
-	JSON403      *Error
-	JSON408      *Error
-	JSON410      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON403      *Forbidden
+	JSON408      *RequestTimeOut
+	JSON410      *Gone
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2901,8 +2911,8 @@ type PasscodeInitResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *Passcode
-	JSON400      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2924,10 +2934,10 @@ func (r PasscodeInitResponse) StatusCode() int {
 type PasswordResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON403      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON403      *Forbidden
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2949,10 +2959,10 @@ func (r PasswordResponse) StatusCode() int {
 type PasswordLoginResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON401      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3016,7 +3026,7 @@ func (r PostSamlCallbackResponse) StatusCode() int {
 type GetSamlMetadataResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
+	JSON400      *BadRequest
 }
 
 // Status returns HTTPResponse.Status
@@ -3065,7 +3075,7 @@ type GetSamlProviderResponse struct {
 		Name                  *string `json:"name,omitempty"`
 		SkipEmailVerification *bool   `json:"skip_email_verification,omitempty"`
 	}
-	JSON400 *Error
+	JSON400 *BadRequest
 }
 
 // Status returns HTTPResponse.Status
@@ -3133,10 +3143,10 @@ type TokenResponse struct {
 		// UserId The ID of the user on whose behalf the token was exchanged.
 		UserId *UUID4 `json:"user_id,omitempty"`
 	}
-	JSON400 *Error
-	JSON404 *Error
-	JSON422 *Error
-	JSON429 *Error
+	JSON400 *BadRequest
+	JSON404 *NotFound
+	JSON422 *UnprocessableEntity
+	JSON429 *TooManyRequests
 }
 
 // Status returns HTTPResponse.Status
@@ -3158,8 +3168,8 @@ func (r TokenResponse) StatusCode() int {
 type DeleteUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON401      *Error
-	JSON500      *Error
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3187,9 +3197,9 @@ type GetUserIdResponse struct {
 		Id                    *UUID4 `json:"id,omitempty"`
 		Verified              *bool  `json:"verified,omitempty"`
 	}
-	JSON400 *Error
-	JSON404 *Error
-	JSON500 *Error
+	JSON400 *BadRequest
+	JSON404 *NotFound
+	JSON500 *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3212,10 +3222,10 @@ type CreateUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *CreateUserResponseObject
-	JSON400      *Error
-	JSON403      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON403      *Forbidden
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3238,10 +3248,10 @@ type ListUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *User
-	JSON400      *Error
-	JSON403      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON403      *Forbidden
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3264,8 +3274,8 @@ type ListCredentialsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *WebauthnCredentials
-	JSON401      *Error
-	JSON500      *Error
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3287,10 +3297,10 @@ func (r ListCredentialsResponse) StatusCode() int {
 type DeleteCredentialResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON401      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3312,10 +3322,10 @@ func (r DeleteCredentialResponse) StatusCode() int {
 type UpdateCredentialResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON401      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3338,9 +3348,9 @@ type WebauthnLoginFinalResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *WebauthnLoginResponse
-	JSON400      *Error
-	JSON401      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3363,8 +3373,8 @@ type WebauthnLoginInitResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *CredentialRequestOptions
-	JSON400      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3393,8 +3403,8 @@ type WebauthnRegFinalResponse struct {
 		// UserId The ID of the user on whose behalf a credential was created
 		UserId *UUID4 `json:"user_id,omitempty"`
 	}
-	JSON400 *Error
-	JSON500 *Error
+	JSON400 *BadRequest
+	JSON500 *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3417,9 +3427,9 @@ type WebauthnRegInitResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *CredentialCreationOptions
-	JSON400      *Error
-	JSON422      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON422      *UnprocessableEntity
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -3885,7 +3895,7 @@ func ParseGetJwksResponse(rsp *http.Response) (*GetJwksResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -3918,14 +3928,14 @@ func ParseListEmailsResponse(rsp *http.Response) (*ListEmailsResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -3951,21 +3961,21 @@ func ParseCreateEmailResponse(rsp *http.Response) (*CreateEmailResponse, error) 
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -3991,21 +4001,21 @@ func ParseDeleteEmailResponse(rsp *http.Response) (*DeleteEmailResponse, error) 
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4031,21 +4041,21 @@ func ParseSetPrimaryEmailResponse(rsp *http.Response) (*SetPrimaryEmailResponse,
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4071,14 +4081,14 @@ func ParseLogoutResponse(rsp *http.Response) (*LogoutResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4114,21 +4124,21 @@ func ParseIsUserAuthorizedResponse(rsp *http.Response) (*IsUserAuthorizedRespons
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4161,42 +4171,42 @@ func ParsePasscodeFinalResponse(rsp *http.Response) (*PasscodeFinalResponse, err
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
+		var dest Forbidden
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON403 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 408:
-		var dest Error
+		var dest RequestTimeOut
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON408 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
-		var dest Error
+		var dest Gone
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON410 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4229,14 +4239,14 @@ func ParsePasscodeInitResponse(rsp *http.Response) (*PasscodeInitResponse, error
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4262,28 +4272,28 @@ func ParsePasswordResponse(rsp *http.Response) (*PasswordResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
+		var dest Forbidden
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON403 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4309,28 +4319,28 @@ func ParsePasswordLoginResponse(rsp *http.Response) (*PasswordLoginResponse, err
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4388,7 +4398,7 @@ func ParseGetSamlMetadataResponse(rsp *http.Response) (*GetSamlMetadataResponse,
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4447,7 +4457,7 @@ func ParseGetSamlProviderResponse(rsp *http.Response) (*GetSamlProviderResponse,
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4515,28 +4525,28 @@ func ParseTokenResponse(rsp *http.Response) (*TokenResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 422:
-		var dest Error
+		var dest UnprocessableEntity
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON422 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest Error
+		var dest TooManyRequests
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4562,14 +4572,14 @@ func ParseDeleteUserResponse(rsp *http.Response) (*DeleteUserResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4607,21 +4617,21 @@ func ParseGetUserIdResponse(rsp *http.Response) (*GetUserIdResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4654,28 +4664,28 @@ func ParseCreateUserResponse(rsp *http.Response) (*CreateUserResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
+		var dest Forbidden
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON403 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4708,28 +4718,28 @@ func ParseListUserResponse(rsp *http.Response) (*ListUserResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
+		var dest Forbidden
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON403 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4762,14 +4772,14 @@ func ParseListCredentialsResponse(rsp *http.Response) (*ListCredentialsResponse,
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4795,28 +4805,28 @@ func ParseDeleteCredentialResponse(rsp *http.Response) (*DeleteCredentialRespons
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4842,28 +4852,28 @@ func ParseUpdateCredentialResponse(rsp *http.Response) (*UpdateCredentialRespons
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4896,21 +4906,21 @@ func ParseWebauthnLoginFinalResponse(rsp *http.Response) (*WebauthnLoginFinalRes
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest Unauthorized
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4943,14 +4953,14 @@ func ParseWebauthnLoginInitResponse(rsp *http.Response) (*WebauthnLoginInitRespo
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4989,14 +4999,14 @@ func ParseWebauthnRegFinalResponse(rsp *http.Response) (*WebauthnRegFinalRespons
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -5029,21 +5039,21 @@ func ParseWebauthnRegInitResponse(rsp *http.Response) (*WebauthnRegInitResponse,
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 422:
-		var dest Error
+		var dest UnprocessableEntity
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON422 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

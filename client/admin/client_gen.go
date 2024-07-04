@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deepmap/oapi-codegen/pkg/runtime"
-	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
+	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 // Defines values for AuditLogTypes.
@@ -418,7 +418,7 @@ type ClientInterface interface {
 	// ListUsers request
 	ListUsers(ctx context.Context, params *ListUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateUser request with any body
+	// CreateUserWithBody request with any body
 	CreateUserWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateUser(ctx context.Context, body CreateUserJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -432,7 +432,7 @@ type ClientInterface interface {
 	// GetUsersIdEmails request
 	GetUsersIdEmails(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostUsersIdEmails request with any body
+	// PostUsersIdEmailsWithBody request with any body
 	PostUsersIdEmailsWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PostUsersIdEmails(ctx context.Context, id Id, body PostUsersIdEmailsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -449,7 +449,7 @@ type ClientInterface interface {
 	// ListWebhooks request
 	ListWebhooks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDbWebhooks request with any body
+	// CreateDbWebhooksWithBody request with any body
 	CreateDbWebhooksWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateDbWebhooks(ctx context.Context, body CreateDbWebhooksJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -460,7 +460,7 @@ type ClientInterface interface {
 	// GetWebhooksId request
 	GetWebhooksId(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutWebhooksId request with any body
+	// PutWebhooksIdWithBody request with any body
 	PutWebhooksIdWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PutWebhooksId(ctx context.Context, id Id, body PutWebhooksIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -764,137 +764,139 @@ func NewListAuditLogsRequest(server string, params *ListAuditLogsParams) (*http.
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if params.Page != nil {
+		if params.Page != nil {
 
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.PerPage != nil {
 
-	if params.PerPage != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "per_page", runtime.ParamLocationQuery, *params.PerPage); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "per_page", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.StartTime != nil {
 
-	if params.StartTime != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "start_time", runtime.ParamLocationQuery, *params.StartTime); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "start_time", runtime.ParamLocationQuery, *params.StartTime); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.EndTime != nil {
 
-	if params.EndTime != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "end_time", runtime.ParamLocationQuery, *params.EndTime); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "end_time", runtime.ParamLocationQuery, *params.EndTime); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.ActorUserId != nil {
 
-	if params.ActorUserId != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "actor_user_id", runtime.ParamLocationQuery, *params.ActorUserId); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "actor_user_id", runtime.ParamLocationQuery, *params.ActorUserId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.ActorEmail != nil {
 
-	if params.ActorEmail != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "actor_email", runtime.ParamLocationQuery, *params.ActorEmail); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "actor_email", runtime.ParamLocationQuery, *params.ActorEmail); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.Q != nil {
 
-	if params.Q != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "q", runtime.ParamLocationQuery, *params.Q); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "q", runtime.ParamLocationQuery, *params.Q); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.Type != nil {
 
-	if params.Type != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "type", runtime.ParamLocationQuery, *params.Type); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "type", runtime.ParamLocationQuery, *params.Type); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
+		queryURL.RawQuery = queryValues.Encode()
 	}
-
-	queryURL.RawQuery = queryValues.Encode()
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -950,89 +952,91 @@ func NewListUsersRequest(server string, params *ListUsersParams) (*http.Request,
 		return nil, err
 	}
 
-	queryValues := queryURL.Query()
+	if params != nil {
+		queryValues := queryURL.Query()
 
-	if params.Page != nil {
+		if params.Page != nil {
 
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.PerPage != nil {
 
-	if params.PerPage != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "per_page", runtime.ParamLocationQuery, *params.PerPage); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "per_page", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.UserId != nil {
 
-	if params.UserId != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "user_id", runtime.ParamLocationQuery, *params.UserId); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "user_id", runtime.ParamLocationQuery, *params.UserId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.Email != nil {
 
-	if params.Email != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "email", runtime.ParamLocationQuery, *params.Email); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "email", runtime.ParamLocationQuery, *params.Email); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
-	}
+		if params.SortDirection != nil {
 
-	if params.SortDirection != nil {
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "sort_direction", runtime.ParamLocationQuery, *params.SortDirection); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "sort_direction", runtime.ParamLocationQuery, *params.SortDirection); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
 				}
 			}
+
 		}
 
+		queryURL.RawQuery = queryValues.Encode()
 	}
-
-	queryURL.RawQuery = queryValues.Encode()
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
@@ -1579,61 +1583,61 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// Status request
+	// StatusWithResponse request
 	StatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*StatusResponse, error)
 
-	// ListAuditLogs request
+	// ListAuditLogsWithResponse request
 	ListAuditLogsWithResponse(ctx context.Context, params *ListAuditLogsParams, reqEditors ...RequestEditorFn) (*ListAuditLogsResponse, error)
 
-	// GetMetrics request
+	// GetMetricsWithResponse request
 	GetMetricsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetMetricsResponse, error)
 
-	// ListUsers request
+	// ListUsersWithResponse request
 	ListUsersWithResponse(ctx context.Context, params *ListUsersParams, reqEditors ...RequestEditorFn) (*ListUsersResponse, error)
 
-	// CreateUser request with any body
+	// CreateUserWithBodyWithResponse request with any body
 	CreateUserWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateUserResponse, error)
 
 	CreateUserWithResponse(ctx context.Context, body CreateUserJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateUserResponse, error)
 
-	// DeleteUser request
+	// DeleteUserWithResponse request
 	DeleteUserWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*DeleteUserResponse, error)
 
-	// GetUser request
+	// GetUserWithResponse request
 	GetUserWithResponse(ctx context.Context, id UUID4, reqEditors ...RequestEditorFn) (*GetUserResponse, error)
 
-	// GetUsersIdEmails request
+	// GetUsersIdEmailsWithResponse request
 	GetUsersIdEmailsWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersIdEmailsResponse, error)
 
-	// PostUsersIdEmails request with any body
+	// PostUsersIdEmailsWithBodyWithResponse request with any body
 	PostUsersIdEmailsWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostUsersIdEmailsResponse, error)
 
 	PostUsersIdEmailsWithResponse(ctx context.Context, id Id, body PostUsersIdEmailsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostUsersIdEmailsResponse, error)
 
-	// DeleteUsersEmailsEmailId request
+	// DeleteUsersEmailsEmailIdWithResponse request
 	DeleteUsersEmailsEmailIdWithResponse(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*DeleteUsersEmailsEmailIdResponse, error)
 
-	// GetUsersIdEmailsEmailId request
+	// GetUsersIdEmailsEmailIdWithResponse request
 	GetUsersIdEmailsEmailIdWithResponse(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*GetUsersIdEmailsEmailIdResponse, error)
 
-	// PostUsersEmailsEmailIdSetPrimary request
+	// PostUsersEmailsEmailIdSetPrimaryWithResponse request
 	PostUsersEmailsEmailIdSetPrimaryWithResponse(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*PostUsersEmailsEmailIdSetPrimaryResponse, error)
 
-	// ListWebhooks request
+	// ListWebhooksWithResponse request
 	ListWebhooksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWebhooksResponse, error)
 
-	// CreateDbWebhooks request with any body
+	// CreateDbWebhooksWithBodyWithResponse request with any body
 	CreateDbWebhooksWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDbWebhooksResponse, error)
 
 	CreateDbWebhooksWithResponse(ctx context.Context, body CreateDbWebhooksJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDbWebhooksResponse, error)
 
-	// DeleteWebhooksId request
+	// DeleteWebhooksIdWithResponse request
 	DeleteWebhooksIdWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*DeleteWebhooksIdResponse, error)
 
-	// GetWebhooksId request
+	// GetWebhooksIdWithResponse request
 	GetWebhooksIdWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetWebhooksIdResponse, error)
 
-	// PutWebhooksId request with any body
+	// PutWebhooksIdWithBodyWithResponse request with any body
 	PutWebhooksIdWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutWebhooksIdResponse, error)
 
 	PutWebhooksIdWithResponse(ctx context.Context, id Id, body PutWebhooksIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PutWebhooksIdResponse, error)
@@ -1664,7 +1668,7 @@ type ListAuditLogsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]AuditLog
-	JSON500      *Error
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1708,8 +1712,8 @@ type ListUsersResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]User
-	JSON400      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1732,9 +1736,9 @@ type CreateUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *User
-	JSON400      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1756,8 +1760,8 @@ func (r CreateUserResponse) StatusCode() int {
 type DeleteUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON404      *Error
-	JSON500      *Error
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1780,9 +1784,9 @@ type GetUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *User
-	JSON400      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1805,8 +1809,8 @@ type GetUsersIdEmailsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]Email
-	JSON400      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1829,10 +1833,10 @@ type PostUsersIdEmailsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON201      *Email
-	JSON400      *Error
-	JSON404      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1854,10 +1858,10 @@ func (r PostUsersIdEmailsResponse) StatusCode() int {
 type DeleteUsersEmailsEmailIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON404      *Error
-	JSON409      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON409      *Conflict
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1880,9 +1884,9 @@ type GetUsersIdEmailsEmailIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *Email
-	JSON400      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1904,9 +1908,9 @@ func (r GetUsersIdEmailsEmailIdResponse) StatusCode() int {
 type PostUsersEmailsEmailIdSetPrimaryResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1932,7 +1936,7 @@ type ListWebhooksResponse struct {
 		Config   *[]Webhook         `json:"config,omitempty"`
 		Database *[]DatabaseWebhook `json:"database,omitempty"`
 	}
-	JSON500 *Error
+	JSON500 *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1955,8 +1959,8 @@ type CreateDbWebhooksResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON201      *DatabaseWebhook
-	JSON400      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -1978,8 +1982,8 @@ func (r CreateDbWebhooksResponse) StatusCode() int {
 type DeleteWebhooksIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON400      *Error
-	JSON404      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
 }
 
 // Status returns HTTPResponse.Status
@@ -2002,9 +2006,9 @@ type GetWebhooksIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *DatabaseWebhook
-	JSON400      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2027,9 +2031,9 @@ type PutWebhooksIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *DatabaseWebhook
-	JSON400      *Error
-	JSON404      *Error
-	JSON500      *Error
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2271,7 +2275,7 @@ func ParseListAuditLogsResponse(rsp *http.Response) (*ListAuditLogsResponse, err
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2320,14 +2324,14 @@ func ParseListUsersResponse(rsp *http.Response) (*ListUsersResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2360,21 +2364,21 @@ func ParseCreateUserResponse(rsp *http.Response) (*CreateUserResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2400,14 +2404,14 @@ func ParseDeleteUserResponse(rsp *http.Response) (*DeleteUserResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2440,21 +2444,21 @@ func ParseGetUserResponse(rsp *http.Response) (*GetUserResponse, error) {
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2487,14 +2491,14 @@ func ParseGetUsersIdEmailsResponse(rsp *http.Response) (*GetUsersIdEmailsRespons
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2527,28 +2531,28 @@ func ParsePostUsersIdEmailsResponse(rsp *http.Response) (*PostUsersIdEmailsRespo
 		response.JSON201 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2574,28 +2578,28 @@ func ParseDeleteUsersEmailsEmailIdResponse(rsp *http.Response) (*DeleteUsersEmai
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest Conflict
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2628,21 +2632,21 @@ func ParseGetUsersIdEmailsEmailIdResponse(rsp *http.Response) (*GetUsersIdEmails
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2668,21 +2672,21 @@ func ParsePostUsersEmailsEmailIdSetPrimaryResponse(rsp *http.Response) (*PostUse
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2718,7 +2722,7 @@ func ParseListWebhooksResponse(rsp *http.Response) (*ListWebhooksResponse, error
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2751,14 +2755,14 @@ func ParseCreateDbWebhooksResponse(rsp *http.Response) (*CreateDbWebhooksRespons
 		response.JSON201 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2784,14 +2788,14 @@ func ParseDeleteWebhooksIdResponse(rsp *http.Response) (*DeleteWebhooksIdRespons
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2824,21 +2828,21 @@ func ParseGetWebhooksIdResponse(rsp *http.Response) (*GetWebhooksIdResponse, err
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2871,21 +2875,21 @@ func ParsePutWebhooksIdResponse(rsp *http.Response) (*PutWebhooksIdResponse, err
 		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
-		var dest Error
+		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest NotFound
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest Error
+		var dest InternalServerError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
