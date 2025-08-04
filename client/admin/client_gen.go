@@ -18,6 +18,10 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
+const (
+	BearerApiKeyAuthScopes = "BearerApiKeyAuth.Scopes"
+)
+
 // Defines values for AuditLogTypes.
 const (
 	AuditLogTypesPasscodeLoginFinalFailed             AuditLogTypes = "passcode_login_final_failed"
@@ -43,26 +47,38 @@ const (
 
 // Defines values for DatabaseWebhookEventEvent.
 const (
-	DatabaseWebhookEventEventUser                   DatabaseWebhookEventEvent = "user"
-	DatabaseWebhookEventEventUserCreate             DatabaseWebhookEventEvent = "user.create"
-	DatabaseWebhookEventEventUserDelete             DatabaseWebhookEventEvent = "user.delete"
-	DatabaseWebhookEventEventUserUpdate             DatabaseWebhookEventEvent = "user.update"
-	DatabaseWebhookEventEventUserUpdateEmail        DatabaseWebhookEventEvent = "user.update.email"
-	DatabaseWebhookEventEventUserUpdateEmailCreate  DatabaseWebhookEventEvent = "user.update.email.create"
-	DatabaseWebhookEventEventUserUpdateEmailDelete  DatabaseWebhookEventEvent = "user.update.email.delete"
-	DatabaseWebhookEventEventUserUpdateEmailPrimary DatabaseWebhookEventEvent = "user.update.email.primary"
+	DatabaseWebhookEventEventEmailSend                DatabaseWebhookEventEvent = "email.send"
+	DatabaseWebhookEventEventUser                     DatabaseWebhookEventEvent = "user"
+	DatabaseWebhookEventEventUserCreate               DatabaseWebhookEventEvent = "user.create"
+	DatabaseWebhookEventEventUserDelete               DatabaseWebhookEventEvent = "user.delete"
+	DatabaseWebhookEventEventUserLogin                DatabaseWebhookEventEvent = "user.login"
+	DatabaseWebhookEventEventUserUpdate               DatabaseWebhookEventEvent = "user.update"
+	DatabaseWebhookEventEventUserUpdateEmail          DatabaseWebhookEventEvent = "user.update.email"
+	DatabaseWebhookEventEventUserUpdateEmailCreate    DatabaseWebhookEventEvent = "user.update.email.create"
+	DatabaseWebhookEventEventUserUpdateEmailDelete    DatabaseWebhookEventEvent = "user.update.email.delete"
+	DatabaseWebhookEventEventUserUpdateEmailPrimary   DatabaseWebhookEventEvent = "user.update.email.primary"
+	DatabaseWebhookEventEventUserUpdateUsername       DatabaseWebhookEventEvent = "user.update.username"
+	DatabaseWebhookEventEventUserUpdateUsernameCreate DatabaseWebhookEventEvent = "user.update.username.create"
+	DatabaseWebhookEventEventUserUpdateUsernameDelete DatabaseWebhookEventEvent = "user.update.username.delete"
+	DatabaseWebhookEventEventUserUpdateUsernameUpdate DatabaseWebhookEventEvent = "user.update.username.update"
 )
 
 // Defines values for WebhookEvents.
 const (
-	WebhookEventsUser                   WebhookEvents = "user"
-	WebhookEventsUserCreate             WebhookEvents = "user.create"
-	WebhookEventsUserDelete             WebhookEvents = "user.delete"
-	WebhookEventsUserUpdate             WebhookEvents = "user.update"
-	WebhookEventsUserUpdateEmail        WebhookEvents = "user.update.email"
-	WebhookEventsUserUpdateEmailCreate  WebhookEvents = "user.update.email.create"
-	WebhookEventsUserUpdateEmailDelete  WebhookEvents = "user.update.email.delete"
-	WebhookEventsUserUpdateEmailPrimary WebhookEvents = "user.update.email.primary"
+	WebhookEventsEmailSend                WebhookEvents = "email.send"
+	WebhookEventsUser                     WebhookEvents = "user"
+	WebhookEventsUserCreate               WebhookEvents = "user.create"
+	WebhookEventsUserDelete               WebhookEvents = "user.delete"
+	WebhookEventsUserLogin                WebhookEvents = "user.login"
+	WebhookEventsUserUpdate               WebhookEvents = "user.update"
+	WebhookEventsUserUpdateEmail          WebhookEvents = "user.update.email"
+	WebhookEventsUserUpdateEmailCreate    WebhookEvents = "user.update.email.create"
+	WebhookEventsUserUpdateEmailDelete    WebhookEvents = "user.update.email.delete"
+	WebhookEventsUserUpdateEmailPrimary   WebhookEvents = "user.update.email.primary"
+	WebhookEventsUserUpdateUsername       WebhookEvents = "user.update.username"
+	WebhookEventsUserUpdateUsernameCreate WebhookEvents = "user.update.username.create"
+	WebhookEventsUserUpdateUsernameDelete WebhookEvents = "user.update.username.delete"
+	WebhookEventsUserUpdateUsernameUpdate WebhookEvents = "user.update.username.update"
 )
 
 // Defines values for ListUsersParamsSortDirection.
@@ -73,14 +89,20 @@ const (
 
 // Defines values for PutWebhooksIdJSONBodyEvents.
 const (
-	PutWebhooksIdJSONBodyEventsUser                   PutWebhooksIdJSONBodyEvents = "user"
-	PutWebhooksIdJSONBodyEventsUserCreate             PutWebhooksIdJSONBodyEvents = "user.create"
-	PutWebhooksIdJSONBodyEventsUserDelete             PutWebhooksIdJSONBodyEvents = "user.delete"
-	PutWebhooksIdJSONBodyEventsUserUpdate             PutWebhooksIdJSONBodyEvents = "user.update"
-	PutWebhooksIdJSONBodyEventsUserUpdateEmail        PutWebhooksIdJSONBodyEvents = "user.update.email"
-	PutWebhooksIdJSONBodyEventsUserUpdateEmailCreate  PutWebhooksIdJSONBodyEvents = "user.update.email.create"
-	PutWebhooksIdJSONBodyEventsUserUpdateEmailDelete  PutWebhooksIdJSONBodyEvents = "user.update.email.delete"
-	PutWebhooksIdJSONBodyEventsUserUpdateEmailPrimary PutWebhooksIdJSONBodyEvents = "user.update.email.primary"
+	PutWebhooksIdJSONBodyEventsEmailSend                PutWebhooksIdJSONBodyEvents = "email.send"
+	PutWebhooksIdJSONBodyEventsUser                     PutWebhooksIdJSONBodyEvents = "user"
+	PutWebhooksIdJSONBodyEventsUserCreate               PutWebhooksIdJSONBodyEvents = "user.create"
+	PutWebhooksIdJSONBodyEventsUserDelete               PutWebhooksIdJSONBodyEvents = "user.delete"
+	PutWebhooksIdJSONBodyEventsUserLogin                PutWebhooksIdJSONBodyEvents = "user.login"
+	PutWebhooksIdJSONBodyEventsUserUpdate               PutWebhooksIdJSONBodyEvents = "user.update"
+	PutWebhooksIdJSONBodyEventsUserUpdateEmail          PutWebhooksIdJSONBodyEvents = "user.update.email"
+	PutWebhooksIdJSONBodyEventsUserUpdateEmailCreate    PutWebhooksIdJSONBodyEvents = "user.update.email.create"
+	PutWebhooksIdJSONBodyEventsUserUpdateEmailDelete    PutWebhooksIdJSONBodyEvents = "user.update.email.delete"
+	PutWebhooksIdJSONBodyEventsUserUpdateEmailPrimary   PutWebhooksIdJSONBodyEvents = "user.update.email.primary"
+	PutWebhooksIdJSONBodyEventsUserUpdateUsername       PutWebhooksIdJSONBodyEvents = "user.update.username"
+	PutWebhooksIdJSONBodyEventsUserUpdateUsernameCreate PutWebhooksIdJSONBodyEvents = "user.update.username.create"
+	PutWebhooksIdJSONBodyEventsUserUpdateUsernameDelete PutWebhooksIdJSONBodyEvents = "user.update.username.delete"
+	PutWebhooksIdJSONBodyEventsUserUpdateUsernameUpdate PutWebhooksIdJSONBodyEvents = "user.update.username.update"
 )
 
 // AuditLog defines model for AuditLog.
@@ -113,6 +135,23 @@ type AuditLog struct {
 
 // AuditLogTypes The type of the audit log
 type AuditLogTypes string
+
+// CreatePassword defines model for CreatePassword.
+type CreatePassword struct {
+	Password *string `json:"password,omitempty"`
+}
+
+// CreateSession defines model for CreateSession.
+type CreateSession struct {
+	IpAddress *string            `json:"ip_address,omitempty"`
+	UserAgent *string            `json:"user_agent,omitempty"`
+	UserId    openapi_types.UUID `json:"user_id"`
+}
+
+// CreateSessionResponse defines model for CreateSessionResponse.
+type CreateSessionResponse struct {
+	SessionToken *string `json:"session_token,omitempty"`
+}
 
 // DatabaseWebhook defines model for DatabaseWebhook.
 type DatabaseWebhook struct {
@@ -164,6 +203,60 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+// Identities A list of third party provider identities
+type Identities = []Identity
+
+// Identity A third party provider identity
+type Identity struct {
+	// CreatedAt Time of creation of the password credential
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+
+	// EmailId The ID of the email this identity is coupled with
+	EmailId *UUID4 `json:"email_id,omitempty"`
+
+	// Id The ID of the identity
+	Id *UUID4 `json:"id,omitempty"`
+
+	// ProviderId The user's third party provider account/user ID
+	ProviderId *string `json:"provider_id,omitempty"`
+
+	// ProviderName The name of the third party provider this identity coupled with
+	ProviderName *string `json:"provider_name,omitempty"`
+
+	// UpdatedAt Time of last update of the password credential
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+}
+
+// OTP defines model for OTP.
+type OTP struct {
+	CreatedAt time.Time          `json:"created_at"`
+	Id        openapi_types.UUID `json:"id"`
+}
+
+// Password The password credential of a user
+type Password struct {
+	// CreatedAt Time of creation of the password credential
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+
+	// Id The ID of the password credential
+	Id *UUID4 `json:"id,omitempty"`
+
+	// UpdatedAt Time of last update of the password credential
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+}
+
+// Session defines model for Session.
+type Session struct {
+	CreatedAt time.Time          `json:"created_at"`
+	ExpiresAt *time.Time         `json:"expires_at,omitempty"`
+	Id        openapi_types.UUID `json:"id"`
+	IpAddress *string            `json:"ip_address,omitempty"`
+	LastUsed  time.Time          `json:"last_used"`
+	UpdatedAt time.Time          `json:"updated_at"`
+	UserAgent *string            `json:"user_agent,omitempty"`
+	UserId    openapi_types.UUID `json:"user_id"`
+}
+
 // UUID4 defines model for UUID4.
 type UUID4 = string
 
@@ -178,11 +271,64 @@ type User struct {
 	// Id The ID of the user
 	Id UUID4 `json:"id"`
 
+	// Identities A list of third party provider identities
+	Identities *Identities `json:"identities,omitempty"`
+
+	// Metadata User metadata
+	Metadata *UserMetadata `json:"metadata,omitempty"`
+	Otp      *OTP          `json:"otp,omitempty"`
+
+	// Password The password credential of a user
+	Password *Password `json:"password,omitempty"`
+
 	// UpdatedAt Time of last update of the user
 	UpdatedAt time.Time `json:"updated_at"`
 
+	// Username The username of the user
+	Username *Username `json:"username,omitempty"`
+
 	// WebauthnCredentials List of registered Webauthn credentials
 	WebauthnCredentials *[]WebAuthnCredential `json:"webauthn_credentials,omitempty"`
+}
+
+// UserBase defines model for UserBase.
+type UserBase struct {
+	// CreatedAt Time of creation of the user
+	CreatedAt time.Time `json:"created_at"`
+
+	// Emails List of emails associated to the user
+	Emails *[]Email `json:"emails,omitempty"`
+
+	// Id The ID of the user
+	Id UUID4 `json:"id"`
+
+	// UpdatedAt Time of last update of the user
+	UpdatedAt time.Time `json:"updated_at"`
+
+	// Username The username of the user
+	Username *Username `json:"username,omitempty"`
+
+	// WebauthnCredentials List of registered Webauthn credentials
+	WebauthnCredentials *[]WebAuthnCredential `json:"webauthn_credentials,omitempty"`
+}
+
+// UserMetadata User metadata
+type UserMetadata struct {
+	PrivateMetadata *map[string]interface{} `json:"private_metadata,omitempty"`
+	PublicMetadata  *map[string]interface{} `json:"public_metadata,omitempty"`
+	UnsafeMetadata  *map[string]interface{} `json:"unsafe_metadata,omitempty"`
+}
+
+// Username The username of the user
+type Username struct {
+	// CreatedAt Time of creation of the username
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+
+	// Id The ID of the username
+	Id *UUID4 `json:"id,omitempty"`
+
+	// UpdatedAt Time of last update of the username
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 // WebAuthnCredential defines model for WebAuthnCredential.
@@ -193,11 +339,23 @@ type WebAuthnCredential struct {
 	// AttestationType The attestation type the credential was registered with
 	AttestationType string `json:"attestation_type"`
 
+	// BackupEligible Indicates if the credential can be backed up
+	BackupEligible bool `json:"backup_eligible"`
+
+	// BackupState Indicates if the credential is backed up
+	BackupState bool `json:"backup_state"`
+
 	// CreatedAt Time of creation of the credential
 	CreatedAt time.Time `json:"created_at"`
 
 	// Id The ID of the credential
 	Id UUID4 `json:"id"`
+
+	// LastUsedAt The time when the credential was last used
+	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+
+	// MfaOnly Indicates if the credential can only be used as a MFA credential
+	MfaOnly bool `json:"mfa_only"`
 
 	// Name A name that the user choose
 	Name *string `json:"name,omitempty"`
@@ -275,7 +433,7 @@ type ListUsersParams struct {
 	// PerPage The number of returned items
 	PerPage *int `form:"per_page,omitempty" json:"per_page,omitempty"`
 
-	// UserId Only users with the specified user_id are included
+	// UserId A single ID or a comma-separated list of IDs. Only users with the specified IDs are included in the result.
 	UserId *UUID4 `form:"user_id,omitempty" json:"user_id,omitempty"`
 
 	// Email Only users with the specified email are included
@@ -302,6 +460,9 @@ type CreateUserJSONBody struct {
 
 	// Id The ID of the new user
 	Id *UUID4 `json:"id,omitempty"`
+
+	// Username The username of the new user
+	Username *string `json:"username,omitempty"`
 }
 
 // PostUsersIdEmailsJSONBody defines parameters for PostUsersIdEmails.
@@ -309,6 +470,13 @@ type PostUsersIdEmailsJSONBody struct {
 	Address    openapi_types.Email `json:"address"`
 	IsPrimary  *bool               `json:"is_primary,omitempty"`
 	IsVerified *bool               `json:"is_verified,omitempty"`
+}
+
+// PatchUserMetadataJSONBody defines parameters for PatchUserMetadata.
+type PatchUserMetadataJSONBody struct {
+	PrivateMetadata *map[string]interface{} `json:"private_metadata,omitempty"`
+	PublicMetadata  *map[string]interface{} `json:"public_metadata,omitempty"`
+	UnsafeMetadata  *map[string]interface{} `json:"unsafe_metadata,omitempty"`
 }
 
 // PutWebhooksIdJSONBody defines parameters for PutWebhooksId.
@@ -321,11 +489,23 @@ type PutWebhooksIdJSONBody struct {
 // PutWebhooksIdJSONBodyEvents defines parameters for PutWebhooksId.
 type PutWebhooksIdJSONBodyEvents string
 
+// PostSessionsJSONRequestBody defines body for PostSessions for application/json ContentType.
+type PostSessionsJSONRequestBody = CreateSession
+
 // CreateUserJSONRequestBody defines body for CreateUser for application/json ContentType.
 type CreateUserJSONRequestBody CreateUserJSONBody
 
 // PostUsersIdEmailsJSONRequestBody defines body for PostUsersIdEmails for application/json ContentType.
 type PostUsersIdEmailsJSONRequestBody PostUsersIdEmailsJSONBody
+
+// PatchUserMetadataJSONRequestBody defines body for PatchUserMetadata for application/json ContentType.
+type PatchUserMetadataJSONRequestBody PatchUserMetadataJSONBody
+
+// PostUsersPasswordJSONRequestBody defines body for PostUsersPassword for application/json ContentType.
+type PostUsersPasswordJSONRequestBody = CreatePassword
+
+// PutUsersPasswordJSONRequestBody defines body for PutUsersPassword for application/json ContentType.
+type PutUsersPasswordJSONRequestBody = CreatePassword
 
 // CreateDbWebhooksJSONRequestBody defines body for CreateDbWebhooks for application/json ContentType.
 type CreateDbWebhooksJSONRequestBody = Webhook
@@ -415,6 +595,11 @@ type ClientInterface interface {
 	// GetMetrics request
 	GetMetrics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostSessionsWithBody request with any body
+	PostSessionsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostSessions(ctx context.Context, body PostSessionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListUsers request
 	ListUsers(ctx context.Context, params *ListUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -445,6 +630,51 @@ type ClientInterface interface {
 
 	// PostUsersEmailsEmailIdSetPrimary request
 	PostUsersEmailsEmailIdSetPrimary(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUserMetadata request
+	GetUserMetadata(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchUserMetadataWithBody request with any body
+	PatchUserMetadataWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PatchUserMetadata(ctx context.Context, id Id, body PatchUserMetadataJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteUsersOtp request
+	DeleteUsersOtp(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUsersOtp request
+	GetUsersOtp(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteUsersPassword request
+	DeleteUsersPassword(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUsersPassword request
+	GetUsersPassword(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostUsersPasswordWithBody request with any body
+	PostUsersPasswordWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostUsersPassword(ctx context.Context, id Id, body PostUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutUsersPasswordWithBody request with any body
+	PutUsersPasswordWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutUsersPassword(ctx context.Context, id Id, body PutUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUsersSessions request
+	GetUsersSessions(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteUsersSessionsSessionId request
+	DeleteUsersSessionsSessionId(ctx context.Context, id Id, sessionId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUsersWebauthnCredentials request
+	GetUsersWebauthnCredentials(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteUsersWebauthnCredentialsCredentialId request
+	DeleteUsersWebauthnCredentialsCredentialId(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUsersWebauthnCredentialsCredentialId request
+	GetUsersWebauthnCredentialsCredentialId(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListWebhooks request
 	ListWebhooks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -492,6 +722,30 @@ func (c *Client) ListAuditLogs(ctx context.Context, params *ListAuditLogsParams,
 
 func (c *Client) GetMetrics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetMetricsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessionsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionsRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessions(ctx context.Context, body PostSessionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionsRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -624,6 +878,198 @@ func (c *Client) GetUsersIdEmailsEmailId(ctx context.Context, id Id, emailId str
 
 func (c *Client) PostUsersEmailsEmailIdSetPrimary(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostUsersEmailsEmailIdSetPrimaryRequest(c.Server, id, emailId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUserMetadata(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUserMetadataRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchUserMetadataWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchUserMetadataRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchUserMetadata(ctx context.Context, id Id, body PatchUserMetadataJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchUserMetadataRequest(c.Server, id, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteUsersOtp(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteUsersOtpRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUsersOtp(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsersOtpRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteUsersPassword(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteUsersPasswordRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUsersPassword(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsersPasswordRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostUsersPasswordWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostUsersPasswordRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostUsersPassword(ctx context.Context, id Id, body PostUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostUsersPasswordRequest(c.Server, id, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutUsersPasswordWithBody(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutUsersPasswordRequestWithBody(c.Server, id, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutUsersPassword(ctx context.Context, id Id, body PutUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutUsersPasswordRequest(c.Server, id, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUsersSessions(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsersSessionsRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteUsersSessionsSessionId(ctx context.Context, id Id, sessionId openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteUsersSessionsSessionIdRequest(c.Server, id, sessionId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUsersWebauthnCredentials(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsersWebauthnCredentialsRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteUsersWebauthnCredentialsCredentialId(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteUsersWebauthnCredentialsCredentialIdRequest(c.Server, id, credentialId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetUsersWebauthnCredentialsCredentialId(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsersWebauthnCredentialsCredentialIdRequest(c.Server, id, credentialId)
 	if err != nil {
 		return nil, err
 	}
@@ -929,6 +1375,46 @@ func NewGetMetricsRequest(server string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewPostSessionsRequest calls the generic PostSessions builder with application/json body
+func NewPostSessionsRequest(server string, body PostSessionsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostSessionsRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostSessionsRequestWithBody generates requests for PostSessions with any type of body
+func NewPostSessionsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/sessions")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -1358,6 +1844,508 @@ func NewPostUsersEmailsEmailIdSetPrimaryRequest(server string, id Id, emailId st
 	return req, nil
 }
 
+// NewGetUserMetadataRequest generates requests for GetUserMetadata
+func NewGetUserMetadataRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/metadata", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPatchUserMetadataRequest calls the generic PatchUserMetadata builder with application/json body
+func NewPatchUserMetadataRequest(server string, id Id, body PatchUserMetadataJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchUserMetadataRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewPatchUserMetadataRequestWithBody generates requests for PatchUserMetadata with any type of body
+func NewPatchUserMetadataRequestWithBody(server string, id Id, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/metadata", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteUsersOtpRequest generates requests for DeleteUsersOtp
+func NewDeleteUsersOtpRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/otp", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUsersOtpRequest generates requests for GetUsersOtp
+func NewGetUsersOtpRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/otp", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteUsersPasswordRequest generates requests for DeleteUsersPassword
+func NewDeleteUsersPasswordRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/password", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUsersPasswordRequest generates requests for GetUsersPassword
+func NewGetUsersPasswordRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/password", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostUsersPasswordRequest calls the generic PostUsersPassword builder with application/json body
+func NewPostUsersPasswordRequest(server string, id Id, body PostUsersPasswordJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostUsersPasswordRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewPostUsersPasswordRequestWithBody generates requests for PostUsersPassword with any type of body
+func NewPostUsersPasswordRequestWithBody(server string, id Id, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/password", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPutUsersPasswordRequest calls the generic PutUsersPassword builder with application/json body
+func NewPutUsersPasswordRequest(server string, id Id, body PutUsersPasswordJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutUsersPasswordRequestWithBody(server, id, "application/json", bodyReader)
+}
+
+// NewPutUsersPasswordRequestWithBody generates requests for PutUsersPassword with any type of body
+func NewPutUsersPasswordRequestWithBody(server string, id Id, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/password", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetUsersSessionsRequest generates requests for GetUsersSessions
+func NewGetUsersSessionsRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/sessions", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteUsersSessionsSessionIdRequest generates requests for DeleteUsersSessionsSessionId
+func NewDeleteUsersSessionsSessionIdRequest(server string, id Id, sessionId openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "session_id", runtime.ParamLocationPath, sessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/sessions/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUsersWebauthnCredentialsRequest generates requests for GetUsersWebauthnCredentials
+func NewGetUsersWebauthnCredentialsRequest(server string, id Id) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/webauthn_credentials", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteUsersWebauthnCredentialsCredentialIdRequest generates requests for DeleteUsersWebauthnCredentialsCredentialId
+func NewDeleteUsersWebauthnCredentialsCredentialIdRequest(server string, id Id, credentialId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "credential_id", runtime.ParamLocationPath, credentialId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/webauthn_credentials/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUsersWebauthnCredentialsCredentialIdRequest generates requests for GetUsersWebauthnCredentialsCredentialId
+func NewGetUsersWebauthnCredentialsCredentialIdRequest(server string, id Id, credentialId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "id", runtime.ParamLocationPath, id)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "credential_id", runtime.ParamLocationPath, credentialId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/users/%s/webauthn_credentials/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListWebhooksRequest generates requests for ListWebhooks
 func NewListWebhooksRequest(server string) (*http.Request, error) {
 	var err error
@@ -1592,6 +2580,11 @@ type ClientWithResponsesInterface interface {
 	// GetMetricsWithResponse request
 	GetMetricsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetMetricsResponse, error)
 
+	// PostSessionsWithBodyWithResponse request with any body
+	PostSessionsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionsResponse, error)
+
+	PostSessionsWithResponse(ctx context.Context, body PostSessionsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionsResponse, error)
+
 	// ListUsersWithResponse request
 	ListUsersWithResponse(ctx context.Context, params *ListUsersParams, reqEditors ...RequestEditorFn) (*ListUsersResponse, error)
 
@@ -1622,6 +2615,51 @@ type ClientWithResponsesInterface interface {
 
 	// PostUsersEmailsEmailIdSetPrimaryWithResponse request
 	PostUsersEmailsEmailIdSetPrimaryWithResponse(ctx context.Context, id Id, emailId string, reqEditors ...RequestEditorFn) (*PostUsersEmailsEmailIdSetPrimaryResponse, error)
+
+	// GetUserMetadataWithResponse request
+	GetUserMetadataWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUserMetadataResponse, error)
+
+	// PatchUserMetadataWithBodyWithResponse request with any body
+	PatchUserMetadataWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchUserMetadataResponse, error)
+
+	PatchUserMetadataWithResponse(ctx context.Context, id Id, body PatchUserMetadataJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchUserMetadataResponse, error)
+
+	// DeleteUsersOtpWithResponse request
+	DeleteUsersOtpWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*DeleteUsersOtpResponse, error)
+
+	// GetUsersOtpWithResponse request
+	GetUsersOtpWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersOtpResponse, error)
+
+	// DeleteUsersPasswordWithResponse request
+	DeleteUsersPasswordWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*DeleteUsersPasswordResponse, error)
+
+	// GetUsersPasswordWithResponse request
+	GetUsersPasswordWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersPasswordResponse, error)
+
+	// PostUsersPasswordWithBodyWithResponse request with any body
+	PostUsersPasswordWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostUsersPasswordResponse, error)
+
+	PostUsersPasswordWithResponse(ctx context.Context, id Id, body PostUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*PostUsersPasswordResponse, error)
+
+	// PutUsersPasswordWithBodyWithResponse request with any body
+	PutUsersPasswordWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutUsersPasswordResponse, error)
+
+	PutUsersPasswordWithResponse(ctx context.Context, id Id, body PutUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*PutUsersPasswordResponse, error)
+
+	// GetUsersSessionsWithResponse request
+	GetUsersSessionsWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersSessionsResponse, error)
+
+	// DeleteUsersSessionsSessionIdWithResponse request
+	DeleteUsersSessionsSessionIdWithResponse(ctx context.Context, id Id, sessionId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteUsersSessionsSessionIdResponse, error)
+
+	// GetUsersWebauthnCredentialsWithResponse request
+	GetUsersWebauthnCredentialsWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersWebauthnCredentialsResponse, error)
+
+	// DeleteUsersWebauthnCredentialsCredentialIdWithResponse request
+	DeleteUsersWebauthnCredentialsCredentialIdWithResponse(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*DeleteUsersWebauthnCredentialsCredentialIdResponse, error)
+
+	// GetUsersWebauthnCredentialsCredentialIdWithResponse request
+	GetUsersWebauthnCredentialsCredentialIdWithResponse(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*GetUsersWebauthnCredentialsCredentialIdResponse, error)
 
 	// ListWebhooksWithResponse request
 	ListWebhooksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWebhooksResponse, error)
@@ -1708,10 +2746,35 @@ func (r GetMetricsResponse) StatusCode() int {
 	return 0
 }
 
+type PostSessionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CreateSessionResponse
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r PostSessionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostSessionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type ListUsersResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *[]User
+	JSON200      *[]UserBase
 	JSON400      *BadRequest
 	JSON500      *InternalServerError
 }
@@ -1929,6 +2992,327 @@ func (r PostUsersEmailsEmailIdSetPrimaryResponse) StatusCode() int {
 	return 0
 }
 
+type GetUserMetadataResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *UserMetadata
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUserMetadataResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUserMetadataResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PatchUserMetadataResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *UserMetadata
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchUserMetadataResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchUserMetadataResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteUsersOtpResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteUsersOtpResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteUsersOtpResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetUsersOtpResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *OTP
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUsersOtpResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUsersOtpResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteUsersPasswordResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteUsersPasswordResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteUsersPasswordResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetUsersPasswordResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Password
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUsersPasswordResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUsersPasswordResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostUsersPasswordResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Password
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r PostUsersPasswordResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostUsersPasswordResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PutUsersPasswordResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Password
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r PutUsersPasswordResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutUsersPasswordResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetUsersSessionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Session
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUsersSessionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUsersSessionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteUsersSessionsSessionIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteUsersSessionsSessionIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteUsersSessionsSessionIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetUsersWebauthnCredentialsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]WebAuthnCredential
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUsersWebauthnCredentialsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUsersWebauthnCredentialsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteUsersWebauthnCredentialsCredentialIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteUsersWebauthnCredentialsCredentialIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteUsersWebauthnCredentialsCredentialIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetUsersWebauthnCredentialsCredentialIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *WebAuthnCredential
+	JSON400      *BadRequest
+	JSON404      *NotFound
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUsersWebauthnCredentialsCredentialIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUsersWebauthnCredentialsCredentialIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type ListWebhooksResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2079,6 +3463,23 @@ func (c *ClientWithResponses) GetMetricsWithResponse(ctx context.Context, reqEdi
 	return ParseGetMetricsResponse(rsp)
 }
 
+// PostSessionsWithBodyWithResponse request with arbitrary body returning *PostSessionsResponse
+func (c *ClientWithResponses) PostSessionsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionsResponse, error) {
+	rsp, err := c.PostSessionsWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostSessionsWithResponse(ctx context.Context, body PostSessionsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionsResponse, error) {
+	rsp, err := c.PostSessions(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionsResponse(rsp)
+}
+
 // ListUsersWithResponse request returning *ListUsersResponse
 func (c *ClientWithResponses) ListUsersWithResponse(ctx context.Context, params *ListUsersParams, reqEditors ...RequestEditorFn) (*ListUsersResponse, error) {
 	rsp, err := c.ListUsers(ctx, params, reqEditors...)
@@ -2174,6 +3575,147 @@ func (c *ClientWithResponses) PostUsersEmailsEmailIdSetPrimaryWithResponse(ctx c
 		return nil, err
 	}
 	return ParsePostUsersEmailsEmailIdSetPrimaryResponse(rsp)
+}
+
+// GetUserMetadataWithResponse request returning *GetUserMetadataResponse
+func (c *ClientWithResponses) GetUserMetadataWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUserMetadataResponse, error) {
+	rsp, err := c.GetUserMetadata(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUserMetadataResponse(rsp)
+}
+
+// PatchUserMetadataWithBodyWithResponse request with arbitrary body returning *PatchUserMetadataResponse
+func (c *ClientWithResponses) PatchUserMetadataWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchUserMetadataResponse, error) {
+	rsp, err := c.PatchUserMetadataWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchUserMetadataResponse(rsp)
+}
+
+func (c *ClientWithResponses) PatchUserMetadataWithResponse(ctx context.Context, id Id, body PatchUserMetadataJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchUserMetadataResponse, error) {
+	rsp, err := c.PatchUserMetadata(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchUserMetadataResponse(rsp)
+}
+
+// DeleteUsersOtpWithResponse request returning *DeleteUsersOtpResponse
+func (c *ClientWithResponses) DeleteUsersOtpWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*DeleteUsersOtpResponse, error) {
+	rsp, err := c.DeleteUsersOtp(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteUsersOtpResponse(rsp)
+}
+
+// GetUsersOtpWithResponse request returning *GetUsersOtpResponse
+func (c *ClientWithResponses) GetUsersOtpWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersOtpResponse, error) {
+	rsp, err := c.GetUsersOtp(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUsersOtpResponse(rsp)
+}
+
+// DeleteUsersPasswordWithResponse request returning *DeleteUsersPasswordResponse
+func (c *ClientWithResponses) DeleteUsersPasswordWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*DeleteUsersPasswordResponse, error) {
+	rsp, err := c.DeleteUsersPassword(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteUsersPasswordResponse(rsp)
+}
+
+// GetUsersPasswordWithResponse request returning *GetUsersPasswordResponse
+func (c *ClientWithResponses) GetUsersPasswordWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersPasswordResponse, error) {
+	rsp, err := c.GetUsersPassword(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUsersPasswordResponse(rsp)
+}
+
+// PostUsersPasswordWithBodyWithResponse request with arbitrary body returning *PostUsersPasswordResponse
+func (c *ClientWithResponses) PostUsersPasswordWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostUsersPasswordResponse, error) {
+	rsp, err := c.PostUsersPasswordWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostUsersPasswordResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostUsersPasswordWithResponse(ctx context.Context, id Id, body PostUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*PostUsersPasswordResponse, error) {
+	rsp, err := c.PostUsersPassword(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostUsersPasswordResponse(rsp)
+}
+
+// PutUsersPasswordWithBodyWithResponse request with arbitrary body returning *PutUsersPasswordResponse
+func (c *ClientWithResponses) PutUsersPasswordWithBodyWithResponse(ctx context.Context, id Id, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutUsersPasswordResponse, error) {
+	rsp, err := c.PutUsersPasswordWithBody(ctx, id, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutUsersPasswordResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutUsersPasswordWithResponse(ctx context.Context, id Id, body PutUsersPasswordJSONRequestBody, reqEditors ...RequestEditorFn) (*PutUsersPasswordResponse, error) {
+	rsp, err := c.PutUsersPassword(ctx, id, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutUsersPasswordResponse(rsp)
+}
+
+// GetUsersSessionsWithResponse request returning *GetUsersSessionsResponse
+func (c *ClientWithResponses) GetUsersSessionsWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersSessionsResponse, error) {
+	rsp, err := c.GetUsersSessions(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUsersSessionsResponse(rsp)
+}
+
+// DeleteUsersSessionsSessionIdWithResponse request returning *DeleteUsersSessionsSessionIdResponse
+func (c *ClientWithResponses) DeleteUsersSessionsSessionIdWithResponse(ctx context.Context, id Id, sessionId openapi_types.UUID, reqEditors ...RequestEditorFn) (*DeleteUsersSessionsSessionIdResponse, error) {
+	rsp, err := c.DeleteUsersSessionsSessionId(ctx, id, sessionId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteUsersSessionsSessionIdResponse(rsp)
+}
+
+// GetUsersWebauthnCredentialsWithResponse request returning *GetUsersWebauthnCredentialsResponse
+func (c *ClientWithResponses) GetUsersWebauthnCredentialsWithResponse(ctx context.Context, id Id, reqEditors ...RequestEditorFn) (*GetUsersWebauthnCredentialsResponse, error) {
+	rsp, err := c.GetUsersWebauthnCredentials(ctx, id, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUsersWebauthnCredentialsResponse(rsp)
+}
+
+// DeleteUsersWebauthnCredentialsCredentialIdWithResponse request returning *DeleteUsersWebauthnCredentialsCredentialIdResponse
+func (c *ClientWithResponses) DeleteUsersWebauthnCredentialsCredentialIdWithResponse(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*DeleteUsersWebauthnCredentialsCredentialIdResponse, error) {
+	rsp, err := c.DeleteUsersWebauthnCredentialsCredentialId(ctx, id, credentialId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteUsersWebauthnCredentialsCredentialIdResponse(rsp)
+}
+
+// GetUsersWebauthnCredentialsCredentialIdWithResponse request returning *GetUsersWebauthnCredentialsCredentialIdResponse
+func (c *ClientWithResponses) GetUsersWebauthnCredentialsCredentialIdWithResponse(ctx context.Context, id Id, credentialId string, reqEditors ...RequestEditorFn) (*GetUsersWebauthnCredentialsCredentialIdResponse, error) {
+	rsp, err := c.GetUsersWebauthnCredentialsCredentialId(ctx, id, credentialId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUsersWebauthnCredentialsCredentialIdResponse(rsp)
 }
 
 // ListWebhooksWithResponse request returning *ListWebhooksResponse
@@ -2302,6 +3844,53 @@ func ParseGetMetricsResponse(rsp *http.Response) (*GetMetricsResponse, error) {
 	return response, nil
 }
 
+// ParsePostSessionsResponse parses an HTTP response from a PostSessionsWithResponse call
+func ParsePostSessionsResponse(rsp *http.Response) (*PostSessionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostSessionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CreateSessionResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListUsersResponse parses an HTTP response from a ListUsersWithResponse call
 func ParseListUsersResponse(rsp *http.Response) (*ListUsersResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2317,7 +3906,7 @@ func ParseListUsersResponse(rsp *http.Response) (*ListUsersResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest []User
+		var dest []UserBase
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2671,6 +4260,589 @@ func ParsePostUsersEmailsEmailIdSetPrimaryResponse(rsp *http.Response) (*PostUse
 	}
 
 	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUserMetadataResponse parses an HTTP response from a GetUserMetadataWithResponse call
+func ParseGetUserMetadataResponse(rsp *http.Response) (*GetUserMetadataResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUserMetadataResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UserMetadata
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchUserMetadataResponse parses an HTTP response from a PatchUserMetadataWithResponse call
+func ParsePatchUserMetadataResponse(rsp *http.Response) (*PatchUserMetadataResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchUserMetadataResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UserMetadata
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteUsersOtpResponse parses an HTTP response from a DeleteUsersOtpWithResponse call
+func ParseDeleteUsersOtpResponse(rsp *http.Response) (*DeleteUsersOtpResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteUsersOtpResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUsersOtpResponse parses an HTTP response from a GetUsersOtpWithResponse call
+func ParseGetUsersOtpResponse(rsp *http.Response) (*GetUsersOtpResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUsersOtpResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest OTP
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteUsersPasswordResponse parses an HTTP response from a DeleteUsersPasswordWithResponse call
+func ParseDeleteUsersPasswordResponse(rsp *http.Response) (*DeleteUsersPasswordResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteUsersPasswordResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUsersPasswordResponse parses an HTTP response from a GetUsersPasswordWithResponse call
+func ParseGetUsersPasswordResponse(rsp *http.Response) (*GetUsersPasswordResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUsersPasswordResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Password
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostUsersPasswordResponse parses an HTTP response from a PostUsersPasswordWithResponse call
+func ParsePostUsersPasswordResponse(rsp *http.Response) (*PostUsersPasswordResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostUsersPasswordResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Password
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePutUsersPasswordResponse parses an HTTP response from a PutUsersPasswordWithResponse call
+func ParsePutUsersPasswordResponse(rsp *http.Response) (*PutUsersPasswordResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutUsersPasswordResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Password
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUsersSessionsResponse parses an HTTP response from a GetUsersSessionsWithResponse call
+func ParseGetUsersSessionsResponse(rsp *http.Response) (*GetUsersSessionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUsersSessionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Session
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteUsersSessionsSessionIdResponse parses an HTTP response from a DeleteUsersSessionsSessionIdWithResponse call
+func ParseDeleteUsersSessionsSessionIdResponse(rsp *http.Response) (*DeleteUsersSessionsSessionIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteUsersSessionsSessionIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUsersWebauthnCredentialsResponse parses an HTTP response from a GetUsersWebauthnCredentialsWithResponse call
+func ParseGetUsersWebauthnCredentialsResponse(rsp *http.Response) (*GetUsersWebauthnCredentialsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUsersWebauthnCredentialsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []WebAuthnCredential
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteUsersWebauthnCredentialsCredentialIdResponse parses an HTTP response from a DeleteUsersWebauthnCredentialsCredentialIdWithResponse call
+func ParseDeleteUsersWebauthnCredentialsCredentialIdResponse(rsp *http.Response) (*DeleteUsersWebauthnCredentialsCredentialIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteUsersWebauthnCredentialsCredentialIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest NotFound
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUsersWebauthnCredentialsCredentialIdResponse parses an HTTP response from a GetUsersWebauthnCredentialsCredentialIdWithResponse call
+func ParseGetUsersWebauthnCredentialsCredentialIdResponse(rsp *http.Response) (*GetUsersWebauthnCredentialsCredentialIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUsersWebauthnCredentialsCredentialIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest WebAuthnCredential
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		var dest BadRequest
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
