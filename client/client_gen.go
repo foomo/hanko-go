@@ -68,6 +68,16 @@ const (
 	CredentialRequestOptionsPublicKeyUserVerificationRequired    CredentialRequestOptionsPublicKeyUserVerification = "required"
 )
 
+// Defines values for JWTClaimsAmr.
+const (
+	JWTClaimsAmrExtprovider JWTClaimsAmr = "ext:<provider>"
+	JWTClaimsAmrOtp         JWTClaimsAmr = "otp"
+	JWTClaimsAmrPasskey     JWTClaimsAmr = "passkey"
+	JWTClaimsAmrPwd         JWTClaimsAmr = "pwd"
+	JWTClaimsAmrSecurityKey JWTClaimsAmr = "security_key"
+	JWTClaimsAmrTotp        JWTClaimsAmr = "totp"
+)
+
 // Defines values for PublicKeyCredentialAssertionResponseType.
 const (
 	PublicKeyCredentialAssertionResponseTypePublicKey PublicKeyCredentialAssertionResponseType = "public-key"
@@ -86,12 +96,23 @@ const (
 	PublicKeyCredentialAttestationResponseTypePublicKey PublicKeyCredentialAttestationResponseType = "public-key"
 )
 
-// Defines values for WebauthnCredentialsTransports.
+// Defines values for WebauthnCredentialAttestationType.
 const (
-	WebauthnCredentialsTransportsBle      WebauthnCredentialsTransports = "ble"
-	WebauthnCredentialsTransportsInternal WebauthnCredentialsTransports = "internal"
-	WebauthnCredentialsTransportsNfc      WebauthnCredentialsTransports = "nfc"
-	WebauthnCredentialsTransportsUsb      WebauthnCredentialsTransports = "usb"
+	WebauthnCredentialAttestationTypeAndroidKey       WebauthnCredentialAttestationType = "android-key"
+	WebauthnCredentialAttestationTypeAndroidSafetynet WebauthnCredentialAttestationType = "android-safetynet"
+	WebauthnCredentialAttestationTypeApple            WebauthnCredentialAttestationType = "apple"
+	WebauthnCredentialAttestationTypeFidoU2f          WebauthnCredentialAttestationType = "fido-u2f"
+	WebauthnCredentialAttestationTypeNone             WebauthnCredentialAttestationType = "none"
+	WebauthnCredentialAttestationTypePacked           WebauthnCredentialAttestationType = "packed"
+	WebauthnCredentialAttestationTypeTpm              WebauthnCredentialAttestationType = "tpm"
+)
+
+// Defines values for WebauthnCredentialTransports.
+const (
+	WebauthnCredentialTransportsBle      WebauthnCredentialTransports = "ble"
+	WebauthnCredentialTransportsInternal WebauthnCredentialTransports = "internal"
+	WebauthnCredentialTransportsNfc      WebauthnCredentialTransports = "nfc"
+	WebauthnCredentialTransportsUsb      WebauthnCredentialTransports = "usb"
 )
 
 // Defines values for ThirdPartyAuthParamsProvider.
@@ -181,7 +202,18 @@ type Emails = []struct {
 	Address *openapi_types.Email `json:"address,omitempty"`
 
 	// Id The ID of the email address
-	Id *UUID4 `json:"id,omitempty"`
+	Id         *UUID4         `json:"id,omitempty"`
+	Identities *[]interface{} `json:"identities,omitempty"`
+	Identity   *struct {
+		// Id The ID of the user at the provider
+		Id *string `json:"id,omitempty"`
+
+		// IdentityId The identity's ID
+		IdentityId *string `json:"identity_id,omitempty"`
+
+		// Provider Contains the display name of the provider, if available. Otherwise contains the provider ID.
+		Provider *string `json:"provider,omitempty"`
+	} `json:"identity,omitempty"`
 
 	// IsPrimary Indicates it's the primary email address.
 	IsPrimary *bool `json:"is_primary,omitempty"`
@@ -223,6 +255,21 @@ type HankoConfiguration struct {
 	} `json:"password,omitempty"`
 }
 
+// Identities The user's third party connections/identities.
+type Identities = []Identity
+
+// Identity Representation of a user's third party connection/identity.
+type Identity struct {
+	// Id The ID of the user at the provider
+	Id *string `json:"id,omitempty"`
+
+	// IdentityId The identity's ID
+	IdentityId *string `json:"identity_id,omitempty"`
+
+	// Provider Contains the display name of the provider, if available. Otherwise contains the provider ID.
+	Provider *string `json:"provider,omitempty"`
+}
+
 // JSONWebKey defines model for JSONWebKey.
 type JSONWebKey struct {
 	Alg *string `json:"alg,omitempty"`
@@ -237,6 +284,50 @@ type JSONWebKey struct {
 type JSONWebKeySet struct {
 	Keys *[]JSONWebKey `json:"keys,omitempty"`
 }
+
+// JWTClaims The claims extracted from a JWT.
+type JWTClaims struct {
+	// Amr Authentication Method References, JSON array of strings that are identifiers for authentication methods used in the authentication.
+	Amr *[]JWTClaimsAmr `json:"amr,omitempty"`
+
+	// Audience The intended audience of the token.
+	Audience *[]string `json:"audience,omitempty"`
+
+	// Email Data about the email address associated with the token's subject, if available.
+	Email *struct {
+		// Address The actual email address.
+		Address *openapi_types.Email `json:"address,omitempty"`
+
+		// IsPrimary Indicates whether the email address is the primary address.
+		IsPrimary *bool `json:"is_primary,omitempty"`
+
+		// IsVerified Indicates whether the email address is verified.
+		IsVerified *bool `json:"is_verified,omitempty"`
+	} `json:"email,omitempty"`
+
+	// Expiration The timestamp indicating when the token will expire.
+	Expiration time.Time `json:"expiration"`
+
+	// IssuedAt The timestamp indicating when the token was issued.
+	IssuedAt *time.Time `json:"issued_at,omitempty"`
+
+	// Issuer The entity that issued the token.
+	Issuer *string `json:"issuer,omitempty"`
+
+	// SessionId The unique identifier for the session associated with this token.
+	SessionId UUID4 `json:"session_id"`
+
+	// Subject The unique identifier of the token's subject.
+	Subject UUID4 `json:"subject"`
+}
+
+// JWTClaimsAmr - `pwd` => password
+// - `passkey` => passkey
+// - `otp` => email passcode
+// - `ext:<provider>` => thirdparty provider, where <provider> is the internal provider ID, e.g. `ext:microsoft`
+// - `totp` => 2FA authenticator app
+// - `security_key` => 2FA security key
+type JWTClaimsAmr string
 
 // Passcode Representation of a passcode
 type Passcode struct {
@@ -292,53 +383,81 @@ type PublicKeyCredentialAttestationResponseType string
 // UUID4 defines model for UUID4.
 type UUID4 = string
 
-// User defines model for User.
-type User struct {
+// UserBase defines model for UserBase.
+type UserBase struct {
 	// CreatedAt Time of creation of the the user
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	CreatedAt  *time.Time `json:"created_at,omitempty"`
+	Emails     *Emails    `json:"emails,omitempty"`
+	FamilyName *string    `json:"family_name,omitempty"`
+	GivenName  *string    `json:"given_name,omitempty"`
 
-	// Email The email address of the user
-	Email *openapi_types.Email `json:"email,omitempty"`
-
-	// Id The ID of the user
+	// Id The ID of the user. Deprecated, use `user_id` instead.
+	// Deprecated:
 	Id *UUID4 `json:"id,omitempty"`
+
+	// Metadata The public and unsafe metadata of a user
+	Metadata  *UserMetadata `json:"metadata,omitempty"`
+	MfaConfig *struct {
+		AuthAppSetUp       *bool `json:"auth_app_set_up,omitempty"`
+		SecurityKeyEnabled *bool `json:"security_key_enabled,omitempty"`
+		TotpEnabled        *bool `json:"totp_enabled,omitempty"`
+	} `json:"mfa_config,omitempty"`
+	Name         *string             `json:"name,omitempty"`
+	Passkeys     *WebauthnCredential `json:"passkeys,omitempty"`
+	Picture      *string             `json:"picture,omitempty"`
+	SecurityKeys *WebauthnCredential `json:"security_keys,omitempty"`
 
 	// UpdatedAt Time of last update of the user
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 
-	// WebauthnCredentials List of registered Webauthn credentials
-	WebauthnCredentials *[]struct {
-		// Id The ID of the Webauthn credential
-		Id *string `json:"id,omitempty"`
-	} `json:"webauthn_credentials,omitempty"`
+	// UserId The ID of the user
+	UserId *UUID4 `json:"user_id,omitempty"`
 }
 
-// WebauthnCredentials A list of WebAuthn credentials
-type WebauthnCredentials = []struct {
-	// Aaguid The AAGUID of the authenticator.
-	Aaguid *bool `json:"aaguid,omitempty"`
+// UserMetadata The public and unsafe metadata of a user
+type UserMetadata struct {
+	PublicMetadata *map[string]interface{} `json:"public_metadata,omitempty"`
+	UnsafeMetadata *map[string]interface{} `json:"unsafe_metadata,omitempty"`
+}
 
-	// CreatedAt Time of creation of the credential
+// Username The representation of a username of the user
+type Username struct {
+	// CreatedAt Time of creation of the username
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 
-	// Id The ID of the Webauthn credential
-	Id *string `json:"id,omitempty"`
+	// Id The ID of the user
+	Id *UUID4 `json:"id,omitempty"`
 
-	// LastUsedAt The time when the credential was used last
-	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
+	// UpdatedAt Time of last update of the username
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 
-	// Name The name of the credential. Can be updated by the user.
-	Name *string `json:"name,omitempty"`
-
-	// PublicKey The public key assigned to the credential.
-	PublicKey *bool `json:"public_key,omitempty"`
-
-	// Transports Transports which may be used by the authenticator.
-	Transports *[]WebauthnCredentialsTransports `json:"transports,omitempty"`
+	// Username The username of the user
+	Username *string `json:"username,omitempty"`
 }
 
-// WebauthnCredentialsTransports defines model for WebauthnCredentials.Transports.
-type WebauthnCredentialsTransports string
+// WebauthnCredential defines model for WebauthnCredential.
+type WebauthnCredential struct {
+	Aaguid          *openapi_types.UUID                `json:"aaguid,omitempty"`
+	AttestationType *WebauthnCredentialAttestationType `json:"attestation_type,omitempty"`
+	BackupEligible  *bool                              `json:"backup_eligible,omitempty"`
+	BackupState     *bool                              `json:"backup_state,omitempty"`
+	CreatedAt       *time.Time                         `json:"created_at,omitempty"`
+	Id              *openapi_types.UUID                `json:"id,omitempty"`
+	LastUsedAt      *time.Time                         `json:"last_used_at,omitempty"`
+	MfaOnly         *bool                              `json:"mfa_only,omitempty"`
+	Name            *string                            `json:"name,omitempty"`
+	PublicKey       *string                            `json:"public-key,omitempty"`
+	Transports      *[]WebauthnCredentialTransports    `json:"transports,omitempty"`
+}
+
+// WebauthnCredentialAttestationType defines model for WebauthnCredential.AttestationType.
+type WebauthnCredentialAttestationType string
+
+// WebauthnCredentialTransports defines model for WebauthnCredential.Transports.
+type WebauthnCredentialTransports string
+
+// WebauthnCredentials A list of WebAuthn credentials
+type WebauthnCredentials = []WebauthnCredential
 
 // WebauthnLoginResponse Response after a successful login with webauthn
 type WebauthnLoginResponse struct {
@@ -362,11 +481,85 @@ type Conflict = Error
 // Forbidden defines model for Forbidden.
 type Forbidden = Error
 
+// GetUserByIdResponse defines model for GetUserByIdResponse.
+type GetUserByIdResponse struct {
+	// CreatedAt Time of creation of the the user
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+
+	// Email The email address of the user
+	Email      *openapi_types.Email `json:"email,omitempty"`
+	Emails     *Emails              `json:"emails,omitempty"`
+	FamilyName *string              `json:"family_name,omitempty"`
+	GivenName  *string              `json:"given_name,omitempty"`
+
+	// Id The ID of the user. Deprecated, use `user_id` instead.
+	// Deprecated:
+	Id *UUID4 `json:"id,omitempty"`
+
+	// Metadata The public and unsafe metadata of a user
+	Metadata  *UserMetadata `json:"metadata,omitempty"`
+	MfaConfig *struct {
+		AuthAppSetUp       *bool `json:"auth_app_set_up,omitempty"`
+		SecurityKeyEnabled *bool `json:"security_key_enabled,omitempty"`
+		TotpEnabled        *bool `json:"totp_enabled,omitempty"`
+	} `json:"mfa_config,omitempty"`
+	Name         *string             `json:"name,omitempty"`
+	Passkeys     *WebauthnCredential `json:"passkeys,omitempty"`
+	Picture      *string             `json:"picture,omitempty"`
+	SecurityKeys *WebauthnCredential `json:"security_keys,omitempty"`
+
+	// UpdatedAt Time of last update of the user
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+
+	// UserId The ID of the user
+	UserId *UUID4 `json:"user_id,omitempty"`
+
+	// Username The username of the user
+	Username *string `json:"username,omitempty"`
+
+	// WebauthnCredentials A list of WebAuthn credentials
+	WebauthnCredentials *WebauthnCredentials `json:"webauthn_credentials,omitempty"`
+}
+
 // Gone defines model for Gone.
 type Gone = Error
 
 // InternalServerError defines model for InternalServerError.
 type InternalServerError = Error
+
+// MeResponse defines model for MeResponse.
+type MeResponse struct {
+	// CreatedAt Time of creation of the the user
+	CreatedAt  *time.Time `json:"created_at,omitempty"`
+	Emails     *Emails    `json:"emails,omitempty"`
+	FamilyName *string    `json:"family_name,omitempty"`
+	GivenName  *string    `json:"given_name,omitempty"`
+
+	// Id The ID of the user. Deprecated, use `user_id` instead.
+	// Deprecated:
+	Id *UUID4 `json:"id,omitempty"`
+
+	// Metadata The public and unsafe metadata of a user
+	Metadata  *UserMetadata `json:"metadata,omitempty"`
+	MfaConfig *struct {
+		AuthAppSetUp       *bool `json:"auth_app_set_up,omitempty"`
+		SecurityKeyEnabled *bool `json:"security_key_enabled,omitempty"`
+		TotpEnabled        *bool `json:"totp_enabled,omitempty"`
+	} `json:"mfa_config,omitempty"`
+	Name         *string             `json:"name,omitempty"`
+	Passkeys     *WebauthnCredential `json:"passkeys,omitempty"`
+	Picture      *string             `json:"picture,omitempty"`
+	SecurityKeys *WebauthnCredential `json:"security_keys,omitempty"`
+
+	// UpdatedAt Time of last update of the user
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+
+	// UserId The ID of the user
+	UserId *UUID4 `json:"user_id,omitempty"`
+
+	// Username The representation of a username of the user
+	Username *Username `json:"username,omitempty"`
+}
 
 // NotFound defines model for NotFound.
 type NotFound = Error
@@ -380,7 +573,24 @@ type TooManyRequests = Error
 // Unauthorized defines model for Unauthorized.
 type Unauthorized = Error
 
-// UnprocessableEntity defines model for Unprocessable Entity.
+// ValidateSessionResponse defines model for ValidateSessionResponse.
+type ValidateSessionResponse struct {
+	// Claims The claims extracted from a JWT.
+	Claims *JWTClaims `json:"claims,omitempty"`
+
+	// ExpirationTime Date-time indicating the expiration of the session. Deprecated, please use `claims.expiration` instead.
+	// Deprecated:
+	ExpirationTime *time.Time `json:"expiration_time,omitempty"`
+
+	// IsValid Indicates whether the session is valid or not
+	IsValid *bool `json:"is_valid,omitempty"`
+
+	// UserId The ID of the user the session is associated with. Deprecated, please use `claims.subject` instead.
+	// Deprecated:
+	UserId *string `json:"user_id,omitempty"`
+}
+
+// UnprocessableEntity defines model for unprocessableEntity.
 type UnprocessableEntity = Error
 
 // CreateEmailJSONBody defines parameters for CreateEmail.
@@ -404,7 +614,7 @@ type PasscodeInitJSONBody struct {
 	EmailId *UUID4 `json:"email_id,omitempty"`
 
 	// UserId The ID of the user
-	UserId *UUID4 `json:"user_id,omitempty"`
+	UserId UUID4 `json:"user_id"`
 }
 
 // PasswordJSONBody defines parameters for Password.
@@ -429,19 +639,6 @@ type PasswordLoginJSONBody struct {
 	UserId UUID4 `json:"user_id"`
 }
 
-// GetSamlAuthParams defines parameters for GetSamlAuth.
-type GetSamlAuthParams struct {
-	// Domain full qualified domain name to which a SAML service provider is registered
-	Domain string `form:"domain" json:"domain"`
-
-	// RedirectTo Base64url encoded string representing the URL the
-	// [`/callback`](#tag/Enterprise-Features/operation/post-saml-callback) eventually redirects to after successful login
-	// with the saml identity provider. It must match one of the allowed redirect URLs set in the backend
-	// [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config)
-	// through the `saml.allowed_redirect_urls`.
-	RedirectTo string `form:"redirect_to" json:"redirect_to"`
-}
-
 // PostSamlCallbackFormdataBody defines parameters for PostSamlCallback.
 type PostSamlCallbackFormdataBody struct {
 	RelayState   *string `form:"RelayState,omitempty" json:"RelayState,omitempty"`
@@ -450,7 +647,7 @@ type PostSamlCallbackFormdataBody struct {
 
 // GetSamlMetadataParams defines parameters for GetSamlMetadata.
 type GetSamlMetadataParams struct {
-	// Domain full qualified domain name to which a SAML service provider is registered
+	// Domain Fully qualified domain name to which a SAML service provider is registered
 	Domain string `form:"domain" json:"domain"`
 
 	// CertOnly Toggle to download the SAML service provider public certificate
@@ -459,8 +656,14 @@ type GetSamlMetadataParams struct {
 
 // GetSamlProviderParams defines parameters for GetSamlProvider.
 type GetSamlProviderParams struct {
-	// Domain full qualified domain name to which a SAML service provider is registered
+	// Domain Fully qualified domain name for which a SAML service provider is registered
 	Domain string `form:"domain" json:"domain"`
+}
+
+// PostSessionsValidateJSONBody defines parameters for PostSessionsValidate.
+type PostSessionsValidateJSONBody struct {
+	// SessionToken The session token (JWT) to validate
+	SessionToken string `json:"session_token"`
 }
 
 // ThirdPartyAuthParams defines parameters for ThirdPartyAuth.
@@ -541,6 +744,9 @@ type PasswordLoginJSONRequestBody PasswordLoginJSONBody
 
 // PostSamlCallbackFormdataRequestBody defines body for PostSamlCallback for application/x-www-form-urlencoded ContentType.
 type PostSamlCallbackFormdataRequestBody PostSamlCallbackFormdataBody
+
+// PostSessionsValidateJSONRequestBody defines body for PostSessionsValidate for application/json ContentType.
+type PostSessionsValidateJSONRequestBody PostSessionsValidateJSONBody
 
 // TokenJSONRequestBody defines body for Token for application/json ContentType.
 type TokenJSONRequestBody TokenJSONBody
@@ -685,9 +891,6 @@ type ClientInterface interface {
 
 	PasswordLogin(ctx context.Context, body PasswordLoginJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetSamlAuth request
-	GetSamlAuth(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*http.Response, error)
-
 	// PostSamlCallbackWithBody request with any body
 	PostSamlCallbackWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -698,6 +901,14 @@ type ClientInterface interface {
 
 	// GetSamlProvider request
 	GetSamlProvider(ctx context.Context, params *GetSamlProviderParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSessionsValidate request
+	GetSessionsValidate(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostSessionsValidateWithBody request with any body
+	PostSessionsValidateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostSessionsValidate(ctx context.Context, body PostSessionsValidateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ThirdPartyAuth request
 	ThirdPartyAuth(ctx context.Context, params *ThirdPartyAuthParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -972,18 +1183,6 @@ func (c *Client) PasswordLogin(ctx context.Context, body PasswordLoginJSONReques
 	return c.Client.Do(req)
 }
 
-func (c *Client) GetSamlAuth(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetSamlAuthRequest(c.Server, params)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
 func (c *Client) PostSamlCallbackWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSamlCallbackRequestWithBody(c.Server, contentType, body)
 	if err != nil {
@@ -1022,6 +1221,42 @@ func (c *Client) GetSamlMetadata(ctx context.Context, params *GetSamlMetadataPar
 
 func (c *Client) GetSamlProvider(ctx context.Context, params *GetSamlProviderParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSamlProviderRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetSessionsValidate(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSessionsValidateRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessionsValidateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionsValidateRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessionsValidate(ctx context.Context, body PostSessionsValidateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionsValidateRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1714,63 +1949,6 @@ func NewPasswordLoginRequestWithBody(server string, contentType string, body io.
 	return req, nil
 }
 
-// NewGetSamlAuthRequest generates requests for GetSamlAuth
-func NewGetSamlAuthRequest(server string, params *GetSamlAuthParams) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/saml/auth")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if params != nil {
-		queryValues := queryURL.Query()
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "domain", runtime.ParamLocationQuery, params.Domain); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
-				}
-			}
-		}
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "redirect_to", runtime.ParamLocationQuery, params.RedirectTo); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
-				}
-			}
-		}
-
-		queryURL.RawQuery = queryValues.Encode()
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
 // NewPostSamlCallbackRequestWithFormdataBody calls the generic PostSamlCallback builder with application/x-www-form-urlencoded body
 func NewPostSamlCallbackRequestWithFormdataBody(server string, body PostSamlCallbackFormdataRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -1913,6 +2091,73 @@ func NewGetSamlProviderRequest(server string, params *GetSamlProviderParams) (*h
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewGetSessionsValidateRequest generates requests for GetSessionsValidate
+func NewGetSessionsValidateRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/sessions/validate")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostSessionsValidateRequest calls the generic PostSessionsValidate builder with application/json body
+func NewPostSessionsValidateRequest(server string, body PostSessionsValidateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostSessionsValidateRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostSessionsValidateRequestWithBody generates requests for PostSessionsValidate with any type of body
+func NewPostSessionsValidateRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/sessions/validate")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -2595,9 +2840,6 @@ type ClientWithResponsesInterface interface {
 
 	PasswordLoginWithResponse(ctx context.Context, body PasswordLoginJSONRequestBody, reqEditors ...RequestEditorFn) (*PasswordLoginResponse, error)
 
-	// GetSamlAuthWithResponse request
-	GetSamlAuthWithResponse(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*GetSamlAuthResponse, error)
-
 	// PostSamlCallbackWithBodyWithResponse request with any body
 	PostSamlCallbackWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSamlCallbackResponse, error)
 
@@ -2608,6 +2850,14 @@ type ClientWithResponsesInterface interface {
 
 	// GetSamlProviderWithResponse request
 	GetSamlProviderWithResponse(ctx context.Context, params *GetSamlProviderParams, reqEditors ...RequestEditorFn) (*GetSamlProviderResponse, error)
+
+	// GetSessionsValidateWithResponse request
+	GetSessionsValidateWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetSessionsValidateResponse, error)
+
+	// PostSessionsValidateWithBodyWithResponse request with any body
+	PostSessionsValidateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionsValidateResponse, error)
+
+	PostSessionsValidateWithResponse(ctx context.Context, body PostSessionsValidateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionsValidateResponse, error)
 
 	// ThirdPartyAuthWithResponse request
 	ThirdPartyAuthWithResponse(ctx context.Context, params *ThirdPartyAuthParams, reqEditors ...RequestEditorFn) (*ThirdPartyAuthResponse, error)
@@ -2854,13 +3104,10 @@ func (r LogoutResponse) StatusCode() int {
 type IsUserAuthorizedResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *struct {
-		// Id The id of the current user
-		Id *UUID4 `json:"id,omitempty"`
-	}
-	JSON400 *BadRequest
-	JSON401 *Unauthorized
-	JSON500 *InternalServerError
+	JSON200      *MeResponse
+	JSON400      *BadRequest
+	JSON401      *Unauthorized
+	JSON500      *InternalServerError
 }
 
 // Status returns HTTPResponse.Status
@@ -2981,27 +3228,6 @@ func (r PasswordLoginResponse) StatusCode() int {
 	return 0
 }
 
-type GetSamlAuthResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-}
-
-// Status returns HTTPResponse.Status
-func (r GetSamlAuthResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetSamlAuthResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
 type PostSamlCallbackResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3088,6 +3314,54 @@ func (r GetSamlProviderResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetSamlProviderResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetSessionsValidateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ValidateSessionResponse
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSessionsValidateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSessionsValidateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostSessionsValidateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ValidateSessionResponse
+	JSON400      *BadRequest
+	JSON500      *InternalServerError
+}
+
+// Status returns HTTPResponse.Status
+func (r PostSessionsValidateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostSessionsValidateResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3247,7 +3521,7 @@ func (r CreateUserResponse) StatusCode() int {
 type ListUserResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *User
+	JSON200      *GetUserByIdResponse
 	JSON400      *BadRequest
 	JSON403      *Forbidden
 	JSON404      *NotFound
@@ -3605,15 +3879,6 @@ func (c *ClientWithResponses) PasswordLoginWithResponse(ctx context.Context, bod
 	return ParsePasswordLoginResponse(rsp)
 }
 
-// GetSamlAuthWithResponse request returning *GetSamlAuthResponse
-func (c *ClientWithResponses) GetSamlAuthWithResponse(ctx context.Context, params *GetSamlAuthParams, reqEditors ...RequestEditorFn) (*GetSamlAuthResponse, error) {
-	rsp, err := c.GetSamlAuth(ctx, params, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetSamlAuthResponse(rsp)
-}
-
 // PostSamlCallbackWithBodyWithResponse request with arbitrary body returning *PostSamlCallbackResponse
 func (c *ClientWithResponses) PostSamlCallbackWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSamlCallbackResponse, error) {
 	rsp, err := c.PostSamlCallbackWithBody(ctx, contentType, body, reqEditors...)
@@ -3647,6 +3912,32 @@ func (c *ClientWithResponses) GetSamlProviderWithResponse(ctx context.Context, p
 		return nil, err
 	}
 	return ParseGetSamlProviderResponse(rsp)
+}
+
+// GetSessionsValidateWithResponse request returning *GetSessionsValidateResponse
+func (c *ClientWithResponses) GetSessionsValidateWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetSessionsValidateResponse, error) {
+	rsp, err := c.GetSessionsValidate(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSessionsValidateResponse(rsp)
+}
+
+// PostSessionsValidateWithBodyWithResponse request with arbitrary body returning *PostSessionsValidateResponse
+func (c *ClientWithResponses) PostSessionsValidateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionsValidateResponse, error) {
+	rsp, err := c.PostSessionsValidateWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionsValidateResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostSessionsValidateWithResponse(ctx context.Context, body PostSessionsValidateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionsValidateResponse, error) {
+	rsp, err := c.PostSessionsValidate(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionsValidateResponse(rsp)
 }
 
 // ThirdPartyAuthWithResponse request returning *ThirdPartyAuthResponse
@@ -4114,10 +4405,7 @@ func ParseIsUserAuthorizedResponse(rsp *http.Response) (*IsUserAuthorizedRespons
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest struct {
-			// Id The id of the current user
-			Id *UUID4 `json:"id,omitempty"`
-		}
+		var dest MeResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4351,22 +4639,6 @@ func ParsePasswordLoginResponse(rsp *http.Response) (*PasswordLoginResponse, err
 	return response, nil
 }
 
-// ParseGetSamlAuthResponse parses an HTTP response from a GetSamlAuthWithResponse call
-func ParseGetSamlAuthResponse(rsp *http.Response) (*GetSamlAuthResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetSamlAuthResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	return response, nil
-}
-
 // ParsePostSamlCallbackResponse parses an HTTP response from a PostSamlCallbackWithResponse call
 func ParsePostSamlCallbackResponse(rsp *http.Response) (*PostSamlCallbackResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4462,6 +4734,86 @@ func ParseGetSamlProviderResponse(rsp *http.Response) (*GetSamlProviderResponse,
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSessionsValidateResponse parses an HTTP response from a GetSessionsValidateWithResponse call
+func ParseGetSessionsValidateResponse(rsp *http.Response) (*GetSessionsValidateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSessionsValidateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ValidateSessionResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostSessionsValidateResponse parses an HTTP response from a PostSessionsValidateWithResponse call
+func ParsePostSessionsValidateResponse(rsp *http.Response) (*PostSessionsValidateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostSessionsValidateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ValidateSessionResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest BadRequest
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest InternalServerError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
 
 	}
 
@@ -4711,7 +5063,7 @@ func ParseListUserResponse(rsp *http.Response) (*ListUserResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest User
+		var dest GetUserByIdResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
