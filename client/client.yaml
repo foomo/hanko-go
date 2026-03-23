@@ -1,7 +1,6 @@
-
 openapi: 3.0.0
 info:
-  version: '0.12.0'
+  version: '1.2.0'
   title: 'Hanko Public API'
   description: |
     ## Introduction
@@ -52,7 +51,12 @@ externalDocs:
   description: More about Hanko
   url: https://github.com/teamhanko/hanko
 servers:
-  - url: 'localhost:8000'
+  # - url: 'http://localhost:8000'
+  - url: "https://{tenant_id}.hanko.io"
+    variables:
+      tenant_id:
+        default: ""
+        description: "The (UU)ID of a tenant. Replace the default value with your tenant ID."
 paths:
   /:
     get:
@@ -84,6 +88,7 @@ paths:
       operationId: passcodeInit
       tags:
         - Passcode
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -98,7 +103,7 @@ paths:
                   description: The ID of the email address
                   allOf:
                     - $ref: '#/components/schemas/UUID4'
-                  required: ["false"]
+              required: [user_id]
       responses:
         '200':
           description: 'Successful passcode login initialization'
@@ -121,6 +126,7 @@ paths:
       operationId: passcodeFinal
       tags:
         - Passcode
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -186,6 +192,7 @@ paths:
       operationId: passwordLogin
       tags:
         - Password
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -240,6 +247,7 @@ paths:
       operationId: password
       tags:
         - Password
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -290,6 +298,7 @@ paths:
       operationId: webauthnLoginInit
       tags:
         - WebAuthn
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -343,6 +352,7 @@ paths:
       operationId: webauthnLoginFinal
       tags:
         - WebAuthn
+      deprecated: true
       requestBody:
         content:
           application/json:
@@ -393,6 +403,7 @@ paths:
       operationId: webauthnRegInit
       tags:
         - WebAuthn
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -406,7 +417,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
         '422':
-          $ref: '#/components/responses/Unprocessable Entity'
+          $ref: '#/components/responses/unprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /webauthn/registration/finalize:
@@ -422,6 +433,7 @@ paths:
       operationId: webauthnRegFinal
       tags:
         - WebAuthn
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -459,6 +471,7 @@ paths:
       operationId: listCredentials
       tags:
         - WebAuthn
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -481,6 +494,7 @@ paths:
       operationId: updateCredential
       tags:
         - WebAuthn
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -500,7 +514,6 @@ paths:
                 name:
                   description: "A new credential name. Has no technical meaning, only serves as an identification aid for the user."
                   type: string
-                  required: ["false"]
       responses:
         '200':
           description: 'Credential updated successfully'
@@ -519,6 +532,7 @@ paths:
       operationId: deleteCredential
       tags:
         - WebAuthn
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -560,6 +574,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /.well-known/config:
     get:
+      deprecated: true
       summary: 'Get public Hanko configuration'
       description: |
         Retrieve public backend configuration options.
@@ -576,8 +591,207 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HankoConfiguration'
+  /saml/provider:
+    get:
+      deprecated: true
+      summary: Get a SAML provider
+      description: Get a SAML service provider config for a provided domain.
+      operationId: get-saml-provider
+      tags:
+        - SAML
+      parameters:
+        - name: domain
+          in: query
+          description: Fully qualified domain name for which a SAML service provider is registered
+          required: true
+          schema:
+            type: string
+            format: hostname
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  enabled:
+                    type: boolean
+                    readOnly: true
+                    default: true
+                  name:
+                    type: string
+                    readOnly: true
+                    example: MySamlProvier
+                  domain:
+                    type: string
+                    format: hostname
+                    readOnly: true
+                    example: text.example
+                  metadata_url:
+                    type: string
+                    format: uri
+                    readOnly: true
+                    example: 'http://idp-metadata.url'
+                  skip_email_verification:
+                    type: boolean
+                    readOnly: true
+                    default: false
+                  attribute_map:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      name:
+                        type: string
+                      family_name:
+                        type: string
+                      given_name:
+                        type: string
+                      middle_name:
+                        type: string
+                      nickname:
+                        type: string
+                      preferred_username:
+                        type: string
+                      profile:
+                        type: string
+                      picture:
+                        type: string
+                      website:
+                        type: string
+                      gender:
+                        type: string
+                      birthdate:
+                        type: string
+                      zone_info:
+                        type: string
+                      locale:
+                        type: string
+                      updated_at:
+                        type: string
+                      email:
+                        type: string
+                      email_verified:
+                        type: string
+                      phone:
+                        type: string
+                      phone_verified:
+                        type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Not Found
+  /saml/metadata:
+    get:
+      summary: Get SAML Metadata
+      description: Download SAML service provider metadata or public certificate.
+      operationId: get-saml-metadata
+      tags:
+        - SAML
+      parameters:
+        - name: domain
+          in: query
+          description: Fully qualified domain name to which a SAML service provider is registered
+          required: true
+          schema:
+            type: string
+        - name: cert_only
+          in: query
+          description: Toggle to download the SAML service provider public certificate
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Not found
+  /saml/callback:
+    post:
+      summary: SAML identity provider callback
+      description: Callback endpoint called by the identity provider after successful login.
+      operationId: post-saml-callback
+      tags:
+        - SAML
+      requestBody:
+        description: SAML Identity Provider Response
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                RelayState:
+                  type: string
+                SAMLResponse:
+                  type: string
+      responses:
+        '302':
+          description: Found
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: 'Contains the JSON Web Token (JWT) that must be provided to protected endpoints.Cookie attributes (e.g. domain) can be set via [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config) option `session.cookie`.'
+            X-Auth-Token:
+              schema:
+                type: string
+              description: 'Present only when enabled via [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config) option `session.enable_auth_token_header`for purposes of cross-domain communication between client and Hanko API.'
+        '307':
+          description: Temporary Redirect
+          headers:
+            Location:
+              schema:
+                type: string
+              description: 'On error, redirect to the `saml.default_redirect_url` set in the backend-configuration. Error details are provided in the location URL in the form of `error` and `error_description`query params.'
+  /sessions/validate:
+    get:
+      tags:
+        - Session Management
+      summary: Validate a session
+      description: Validate a session using a cookie header or an authorization header.
+      security:
+        - CookieAuth: [ ]
+        - BearerTokenAuth: [ ]
+      responses:
+        '200':
+          $ref: "#/components/responses/ValidateSessionResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Session Management
+      summary: Validate a session
+      description: Validate a session using a session token in a request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                session_token:
+                  description: The session token (JWT) to validate
+                  type: string
+                  format: JWT
+              required:
+                - session_token
+      responses:
+        '200':
+          $ref: "#/components/responses/ValidateSessionResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /thirdparty/auth:
     get:
+      deprecated: true
       summary: 'Initialize third party login'
       description: |
         Initialize an OAuth-backed (authorization code grant type) login with a third party provider by redirecting to
@@ -683,6 +897,7 @@ paths:
                 $ref: '#/components/schemas/CookieSession'
   /token:
     post:
+      deprecated: true
       summary: 'Exchange one time token for session'
       description: |
         Provide a one time token (e.g. obtained through the [thirdparty callback](#tag/Third-Party/operation/thirdPartyCallback)) to retrieve a session JWT as cookie
@@ -734,11 +949,12 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/components/responses/Unprocessable Entity'
+          $ref: '#/components/responses/unprocessableEntity'
         '429':
           $ref: '#/components/responses/TooManyRequests'
   /user:
     post:
+      deprecated: true
       summary: 'Get user details by email'
       description: Retrieve details for user corresponding to the given `email`.
       operationId: getUserId
@@ -776,6 +992,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      deprecated: true
       summary: 'Deletes the current user'
       description: Used to delete the current user. Note that `config.account.allow_deletion` must be set to true.
       operationId: deleteUser
@@ -793,8 +1010,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /me:
     get:
-      summary: 'Get the current user ID'
-      description: Retrieve the user ID for the current user (i.e. the subject of the JWT).
+      summary: 'Get the current user'
+      description: Retrieve data for the current user (i.e. the subject of the JWT given in a cookie or as a bearer token).
       operationId: IsUserAuthorized
       tags:
         - User Management
@@ -803,16 +1020,7 @@ paths:
         - BearerTokenAuth: [ ]
       responses:
         '200':
-          description: 'User'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    description: The id of the current user
-                    allOf:
-                      - $ref: '#/components/schemas/UUID4'
+          $ref: '#/components/responses/MeResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -838,6 +1046,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /users:
     post:
+      deprecated: true
       summary: 'Create a user'
       description: Used to create a new user. To disable this endpoint, `config.account.allow_signup` must be set to false.
       operationId: createUser
@@ -860,7 +1069,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateUserResponseObject'
+                $ref: '#/components/schemas/CreateUserResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -873,8 +1082,12 @@ paths:
     get:
       summary: 'Get a user by ID'
       operationId: listUser
+      deprecated: true
       tags:
         - User Management
+      security:
+        - CookieAuth: [ ]
+        - BearerTokenAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -884,11 +1097,7 @@ paths:
             $ref: '#/components/schemas/UUID4'
       responses:
         '200':
-          description: 'Details about the user'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+          $ref: '#/components/responses/GetUserByIdResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -903,6 +1112,7 @@ paths:
       operationId: listEmails
       tags:
         - Email Management
+      deprecated: true
       security:
         - CookieAuth: [ ]
         - BearerTokenAuth: [ ]
@@ -918,6 +1128,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
+      deprecated: true
       summary: 'Add a new email address to the current user.'
       operationId: createEmail
       tags:
@@ -947,6 +1158,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /emails/{id}/set_primary:
     post:
+      deprecated: true
       summary: 'Marks the email address as primary email'
       operationId: setPrimaryEmail
       tags:
@@ -972,6 +1184,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /emails/{id}:
     delete:
+      deprecated: true
       summary: 'Delete an email address'
       operationId: deleteEmail
       tags:
@@ -995,215 +1208,62 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /saml/provider:
-    get:
-      summary: Get a SAML Provider - Only available when SAML in config is enabled
-      description: Get a SAML service provider config for a provided domain.
-      operationId: get-saml-provider
-      tags:
-        - Enterprise Features
-      parameters:
-        - name: domain
-          in: query
-          description: full qualified domain name to which a SAML service provider is registered
-          required: true
-          schema:
-            type: string
-            format: hostname
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  enabled:
-                    type: boolean
-                    readOnly: true
-                    default: true
-                  name:
-                    type: string
-                    readOnly: true
-                    example: The Name
-                  domain:
-                    type: string
-                    format: hostname
-                    readOnly: true
-                    example: text.example
-                  metadata_url:
-                    type: string
-                    format: uri
-                    readOnly: true
-                    example: 'http://idp-metadata.url'
-                  skip_email_verification:
-                    type: boolean
-                    readOnly: true
-                    default: false
-                  attribute_map:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      name:
-                        type: string
-                      family_name:
-                        type: string
-                      given_name:
-                        type: string
-                      middle_name:
-                        type: string
-                      nickname:
-                        type: string
-                      preferred_username:
-                        type: string
-                      profile:
-                        type: string
-                      picture:
-                        type: string
-                      website:
-                        type: string
-                      gender:
-                        type: string
-                      birthdate:
-                        type: string
-                      zone_info:
-                        type: string
-                      locale:
-                        type: string
-                      updated_at:
-                        type: string
-                      email:
-                        type: string
-                      email_verified:
-                        type: string
-                      phone:
-                        type: string
-                      phone_verified:
-                        type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          description: Not Found
-      servers:
-        - url: 'localhost:8000'
-  /saml/metadata:
-    get:
-      summary: Get SAML Metadata - Only available when SAML in config is enabled
-      description: Downloads SAML service Provider Metadata or Public Certificate
-      operationId: get-saml-metadata
-      tags:
-        - Enterprise Features
-      parameters:
-        - name: domain
-          in: query
-          description: full qualified domain name to which a SAML service provider is registered
-          required: true
-          schema:
-            type: string
-        - name: cert_only
-          in: query
-          description: Toggle to download the SAML service provider public certificate
-          schema:
-            type: boolean
-      responses:
-        '200':
-          description: OK
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          description: Not Found
-      servers:
-        - url: 'localhost:8000'
-  /saml/auth:
-    get:
-      summary: Initialize SAML login - Only available when SAML in config is enabled
-      description: |
-        Initialize an SAML login with an identity provider by redirecting to
-        the specified domain login URL to retrieve a SAML Assertion.
-      operationId: get-saml-auth
-      tags:
-        - Enterprise Features
-      parameters:
-        - name: domain
-          in: query
-          description: full qualified domain name to which a SAML service provider is registered
-          required: true
-          schema:
-            type: string
-        - name: redirect_to
-          in: query
-          description: |
-            Base64url encoded string representing the URL the
-            [`/callback`](#tag/Enterprise-Features/operation/post-saml-callback) eventually redirects to after successful login
-            with the saml identity provider. It must match one of the allowed redirect URLs set in the backend
-            [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config)
-            through the `saml.allowed_redirect_urls`.
-          required: true
-          schema:
-            type: string
-            format: base64url
-      responses:
-        '307':
-          description: Redirect to third party provider
-          headers:
-            Location:
-              schema:
-                type: string
-              description: |
-                Redirect to the third party provider on success. On error, redirects to the `Referer`. If `Referer` is
-                not present, redirects to the `saml.default_redirect_url` set in the backend
-                [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config).
-                Error details are provided in the location URL in the form of `error` and `error_description`
-                query params.
-      servers:
-        - url: 'localhost:8000'
-  /saml/callback:
-    post:
-      summary: SAML identity provider callback - Only available when SAML in config is enabled
-      description: Callback endpoint called by the identity provicer after successful login.
-      operationId: post-saml-callback
-      tags:
-        - Enterprise Features
-      requestBody:
-        description: SAML Identity Provider Response
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                RelayState:
-                  type: string
-                SAMLResponse:
-                  type: string
-      responses:
-        '302':
-          description: Found
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-              description: 'Contains the JSON Web Token (JWT) that must be provided to protected endpoints.Cookie attributes (e.g. domain) can be set via [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config) option `session.cookie`.'
-            X-Auth-Token:
-              schema:
-                type: string
-              description: 'Present only when enabled via [configuration](https://github.com/teamhanko/hanko/blob/main/backend/docs/Config.md#hanko-backend-config) option `session.enable_auth_token_header`for purposes of cross-domain communication between client and Hanko API.'
-        '307':
-          description: Temporary Redirect
-          headers:
-            Location:
-              schema:
-                type: string
-              description: 'On error, redirect to the `saml.default_redirect_url` set in the backend-configuration. Error details are provided in the location URL in the form of `error` and `error_description`query params.'
-      servers:
-        - url: 'localhost:8000'
 components:
   responses:
+    MeResponse:
+      description: Details for the current user
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/UserBase'
+              - type: object
+                properties:
+                  username:
+                    $ref: '#/components/schemas/Username'
+    GetUserByIdResponse:
+      description: Details for a user retrieved by ID
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/UserBase'
+              - type: object
+                properties:
+                  email:
+                    description: The email address of the user
+                    type: string
+                    format: email
+                  username:
+                    description: The username of the user
+                    type: string
+                  webauthn_credentials:
+                    $ref: '#/components/schemas/WebauthnCredentials'
+    ValidateSessionResponse:
+      description: Session validation response
+      content:
+        application/json:
+          schema:
+            properties:
+              is_valid:
+                description: Indicates whether the session is valid or not
+                type: boolean
+              expiration_time:
+                description: Date-time indicating the expiration of the session. Deprecated, please use `claims.expiration` instead.
+                type: string
+                format: date-time
+                deprecated: true
+              user_id:
+                description: The ID of the user the session is associated with. Deprecated, please use `claims.subject` instead.
+                type: string
+                format: uuid4
+                deprecated: true
+              claims:
+                $ref: '#/components/schemas/JWTClaims'
+            required:
+              - isValid
     BadRequest:
       description: Bad Request
       content:
@@ -1285,7 +1345,7 @@ components:
           example:
             code: 401
             message: Unauthorized
-    Unprocessable Entity:
+    unprocessableEntity:
       description: Unprocessable Entity
       content:
         application/json:
@@ -1383,7 +1443,7 @@ components:
                 - type: public-key
                   alg: -7
             timeout:
-              type: integer
+              type: number
               format: int64
               example: 60000
             authenticatorSelection:
@@ -1434,7 +1494,7 @@ components:
               format: base64url
               example: qgOI+0KpGnl9NOqaT6dfsYvi96R87LgpErnvePeOgSU=
             timeout:
-              type: integer
+              type: number
               format: int64
               example: 60000
             rpId:
@@ -1461,6 +1521,26 @@ components:
                 - preferred
                 - discouraged
               example: required
+    Identity:
+      type: object
+      description: Representation of a user's third party connection/identity.
+      properties:
+        id:
+          type: string
+          description: The ID of the user at the provider
+        identity_id:
+          type: string
+          description: The identity's ID
+          format: uuid4
+        provider:
+          type: string
+          description: |
+            Contains the display name of the provider, if available. Otherwise contains the provider ID.
+    Identities:
+      description: The user's third party connections/identities.
+      type: array
+      items:
+        $ref: '#/components/schemas/Identity'
     JSONWebKey:
       type: object
       externalDocs:
@@ -1646,7 +1726,7 @@ components:
                 type: string
                 format: base64url
                 example: Meprtysj5ZZrTlg0qiLbsZ168OtQMeGVAikVy2n1hvvG...
-    CreateUserResponseObject:
+    CreateUserResponse:
       type: object
       properties:
         user_id:
@@ -1657,17 +1737,85 @@ components:
           description: "The ID of the newly created email address"
           allOf:
             - $ref: '#/components/schemas/UUID4'
-    User:
+    JWTClaims:
+      type: object
+      description: "The claims extracted from a JWT."
+      properties:
+        subject:
+          description: "The unique identifier of the token's subject."
+          allOf:
+            - $ref: '#/components/schemas/UUID4'
+        issued_at:
+          description: "The timestamp indicating when the token was issued."
+          type: string
+          format: date-time
+        expiration:
+          description: "The timestamp indicating when the token will expire."
+          type: string
+          format: date-time
+        audience:
+          description: "The intended audience of the token."
+          type: array
+          items:
+            type: string
+        issuer:
+          description: "The entity that issued the token."
+          type: string
+        email:
+          description: "Data about the email address associated with the token's subject, if available."
+          type: object
+          properties:
+            address:
+              description: "The actual email address."
+              type: string
+              format: email
+            is_primary:
+              description: "Indicates whether the email address is the primary address."
+              type: boolean
+            is_verified:
+              description: "Indicates whether the email address is verified."
+              type: boolean
+        session_id:
+          description: "The unique identifier for the session associated with this token."
+          allOf:
+            - $ref: '#/components/schemas/UUID4'
+        amr:
+          description: Authentication Method References, JSON array of strings that are identifiers for authentication methods used in the authentication.
+          type: array
+          items:
+            type: string
+            enum:
+              - pwd
+              - passkey
+              - otp
+              - ext:<provider>
+              - totp
+              - security_key
+            description: |
+              - `pwd` => password
+              - `passkey` => passkey
+              - `otp` => email passcode
+              - `ext:<provider>` => thirdparty provider, where <provider> is the internal provider ID, e.g. `ext:microsoft`
+              - `totp` => 2FA authenticator app
+              - `security_key` => 2FA security key
+      required:
+        - subject
+        - expiration
+        - session_id
+    UserBase:
       type: object
       properties:
         id:
+          description: The ID of the user. Deprecated, use `user_id` instead.
+          deprecated: true
+          allOf:
+            - $ref: '#/components/schemas/UUID4'
+        user_id:
           description: The ID of the user
           allOf:
             - $ref: '#/components/schemas/UUID4'
-        email:
-          description: The email address of the user
-          type: string
-          format: email
+        emails:
+          $ref: '#/components/schemas/Emails'
         created_at:
           description: Time of creation of the the user
           type: string
@@ -1676,17 +1824,79 @@ components:
           description: Time of last update of the user
           type: string
           format: date-time
-        webauthn_credentials:
-          description: List of registered Webauthn credentials
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                description: The ID of the Webauthn credential
-                type: string
-                format: base64url
-                example: Meprtysj5ZZrTlg0qiLbsZ168OtQMeGVAikVy2n1hvvG...
+        passkeys:
+          $ref: "#/components/schemas/WebauthnCredential"
+        security_keys:
+          allOf:
+            - $ref: "#/components/schemas/WebauthnCredential"
+            - example:
+                id: "f826013e-e7e3-4366-a6d8-9359effc8cdd"
+                name: "Yubikey Bio"
+                public_key: "aNMEEyadASFYIBblARCP_at3cmp4gg3zQN1lJ..."
+                attestation_type: "packed"
+                aaguid: "90636e1f-ef82-43bf-bdcf-5255f139d12f"
+                last_used_at: "2026-02-24T21:40:36.26936Z"
+                created_at: "2026-02-24T21:40:36.26936Z"
+                transports: [
+                  "usb"
+                ]
+                backup_eligible: true
+                backup_state: false
+                mfa_only: true
+        metadata:
+          $ref: "#/components/schemas/UserMetadata"
+        name:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+        picture:
+          type: string
+          format: uri
+        mfa_config:
+          type: object
+          properties:
+            auth_app_set_up:
+              type: boolean
+            totp_enabled:
+              type: boolean
+            security_key_enabled:
+              type: boolean
+    UserMetadata:
+      description: The public and unsafe metadata of a user
+      type: object
+      properties:
+        public_metadata:
+          type: object
+          additionalProperties: true
+          example:
+            role: admin
+        unsafe_metadata:
+          type: object
+          additionalProperties: true
+          example:
+            birthday: "2025-05-12"
+    Username:
+      description: The representation of a username of the user
+      type: object
+      properties:
+        id:
+          description: The ID of the user
+          allOf:
+            - $ref: '#/components/schemas/UUID4'
+        created_at:
+          description: Time of creation of the username
+          type: string
+          format: date-time
+        updated_at:
+          description: Time of last update of the username
+          type: string
+          format: date-time
+        username:
+          description: The username of the user
+          type: string
+          example: john_doe
     Emails:
       type: array
       items:
@@ -1706,59 +1916,111 @@ components:
           is_primary:
             description: Indicates it's the primary email address.
             type: boolean
+          identity:
+            allOf:
+              - $ref: '#/components/schemas/Identity'
+              - deprecated: true
+              - description: Deprecated, use `user.identities` instead.
+          identities:
+            allOf:
+              - $ref: '#/components/schemas/Identities'
+              - deprecated: true
+              - description: Deprecated, use `user.identities` instead.
       example:
         - id: 5333cc5b-c7c4-48cf-8248-9c184ac72b65
           address: john.doe@example.com
           is_verified: true
           is_primary: false
+    WebauthnCredential:
+      type: object
+      properties:
+        aaguid:
+          type: string
+          format: uuid
+        attestation_type:
+          type: string
+          enum:
+            - none
+            - packed
+            - tpm
+            - android-key
+            - android-safetynet
+            - fido-u2f
+            - apple
+        backup_eligible:
+          type: boolean
+        backup_state:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+        last_used_at:
+          type: string
+          format: date-time
+        mfa_only:
+          type: boolean
+        name:
+          type: string
+        public-key:
+          type: string
+        transports:
+          type: array
+          items:
+            type: string
+            enum:
+              - ble
+              - internal
+              - nfc
+              - usb
+      example:
+          id: "5333cc5b-c7c4-48cf-8248-9c184ac72b65"
+          name: "iCloud"
+          public_key: "pQECYyagASFYIBblARCP_at3cmprjzQN1lJ..."
+          attestation_type: "packed"
+          aaguid: "01020304-0506-0708-0102-030405060708"
+          last_used_at: "2026-02-24T21:40:36.26936Z"
+          created_at: "2026-02-24T21:40:36.26936Z"
+          transports: [
+            "internal"
+          ]
+          backup_eligible: true
+          backup_state: true
+          mfa_only: false
     WebauthnCredentials:
       description: 'A list of WebAuthn credentials'
       type: array
       items:
-        type: object
-        properties:
-          id:
-            description: The ID of the Webauthn credential
-            type: string
-            format: base64url
-            example: Meprtysj5ZZrTlg0qiLbsZ168OtQMeGVAikVy2n1hvvG...
-          name:
-            description: The name of the credential. Can be updated by the user.
-            type: string
-            required: ["false"]
-          public_key:
-            description: The public key assigned to the credential.
-            type: boolean
-          aaguid:
-            description: The AAGUID of the authenticator.
-            type: boolean
-          transports:
-            description: Transports which may be used by the authenticator.
-            type: array
-            items:
-              type: string
-              enum:
-                - usb
-                - nfc
-                - ble
-                - internal
-          last_used_at:
-            description: The time when the credential was used last
-            type: string
-            required: ["false"]
-            format: date-time
-          created_at:
-            description: Time of creation of the credential
-            type: string
-            format: date-time
+        $ref: '#/components/schemas/WebauthnCredential'
       example:
-        - id: 5333cc5b-c7c4-48cf-8248-9c184ac72b65
+        - id: "5333cc5b-c7c4-48cf-8248-9c184ac72b65"
           name: "iCloud"
           public_key: "pQECYyagASFYIBblARCP_at3cmprjzQN1lJ..."
-          aaguid: "adce0002-35bc-c60a-648b-0b25f1f05503"
-          transports:
-            - internal
-          created_at: "022-12-06T21:26:06.535106Z"
+          attestation_type: "packed"
+          aaguid: "01020304-0506-0708-0102-030405060708"
+          last_used_at: "2026-02-24T21:40:36.26936Z"
+          created_at: "2026-02-24T21:40:36.26936Z"
+          transports: [
+            "internal"
+          ]
+          backup_eligible: true
+          backup_state: true
+          mfa_only: false
+        - id: "f826013e-e7e3-4366-a6d8-9359effc8cdd"
+          name: "Yubikey Bio"
+          public_key: "aNMEEyadASFYIBblARCP_at3cmp4gg3zQN1lJ..."
+          attestation_type: "packed"
+          aaguid: "90636e1f-ef82-43bf-bdcf-5255f139d12f"
+          last_used_at: "2026-02-24T21:40:36.26936Z"
+          created_at: "2026-02-24T21:40:36.26936Z"
+          transports: [
+            "usb"
+          ]
+          backup_eligible: true
+          backup_state: false
+          mfa_only: true
     WebauthnLoginResponse:
       description: 'Response after a successful login with webauthn'
       type: object
