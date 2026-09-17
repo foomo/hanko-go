@@ -1,8 +1,12 @@
-# hanko-go
-
-[![Build Status](https://github.com/foomo/keel/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/foomo/hanko-go/actions/workflows/test.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/foomo/hanko-go)](https://goreportcard.com/report/github.com/foomo/hanko-go)
 [![GoDoc](https://godoc.org/github.com/foomo/hanko-go?status.svg)](https://godoc.org/github.com/foomo/hanko-go)
+[![Coverage](https://img.shields.io/codecov/c/github/foomo/hanko-go?style=flat-square&logo=github)](https://app.codecov.io/gh/foomo/hanko-go)
+[![GitHub Stars](https://img.shields.io/github/stars/foomo/hanko-go.svg?style=flat-square&logo=github)](https://github.com/foomo/hanko-go)
+
+<p align="center">
+  <img alt="dockprox" src="docs/public/logo.png" width="400" height="400"/>
+</p>
+
+# hanko-go
 
 The `hanko-go` repository provides Go clients for integrating with [Hanko Auth](https://github.com/teamhanko/hanko). It includes a public client and an admin client, allowing developers to easily incorporate Hanko authentication into their Go applications.
 
@@ -10,28 +14,12 @@ To get started, refer to the documentation and examples provided in the reposito
 
 ## How to Contribute
 
-Feel free to explore the code and contribute to the development of `hanko-go` on GitHub.
+Contributions are welcome! Please read the [contributing guide](docs/CONTRIBUTING.md).
 
-Download required binaries:
-
-```shell
-$ make brew
-```
-
-Regenerate code:
-
-```shell
-$ make generate
-```
-
-Run linter & tests:
-
-```shell
-$ make lint
-$ make test
-```
-
+![Contributors](https://contributors-table.vercel.app/image?repo=foomo/hanko-go&width=50&columns=15)
 
 ## License
 
 Distributed under MIT License, please see license file within the code for more details.
+
+_Made with ♥ [foomo](https://www.foomo.org) by [bestbytes](https://www.bestbytes.com)_

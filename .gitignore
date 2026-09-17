@@ -1,21 +1,41 @@
 .*
-*.log
+*.gz
+*.zip
+*.tar
+*.tgz
+*.pem
+*.key
 *.out
-/bin/
-/tmp/
+*.log
+bin/
+dist/
+tmp/
 
 ## Git
 !.gitkeep
 !.gitignore
+!.gitattributes
 
 ## GitHub
 !.github/
 
+## Mise
+!.mise.toml
+
+## Lefthook
+!.lefthook.yaml
+
 ## Editorconfig
 !.editorconfig
 
-## Golang
-go.work
-go.work.sum
-!.golangci.yml
-!.goreleaser.yml
+### Golang
+/go.work
+/go.work.sum
+!.golangci.yaml
+!.goreleaser.yaml
+
+## Vitepress
+!docs/.vitepress
+docs/.vitepress/*
+!docs/.vitepress/theme/
+!docs/.vitepress/config.mts
