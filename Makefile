@@ -3,93 +3,132 @@
 
 # --- Config -----------------------------------------------------------------
 
-export BIN_DIR=$(shell pwd)/bin
-export TEMP_DIR=$(shell pwd)/tmp
-export PATH=${BIN_DIR}:$(shell echo $$PATH)
+# Newline hack for error output
+define br
 
-OAPI_CODEGEN_VERSION:=2.3.0
+
+endef
 
 # --- Targets -----------------------------------------------------------------
 
 # This allows us to accept extra arguments
-%:
+%: .mise .lefthook
 	@:
 
-## === Tasks ===
+.PHONY: .mise
+# Install dependencies
+.mise:
+ifeq (, $(shell command -v mise))
+	$(error $(br)$(br)Please ensure you have 'mise' installed and activated!$(br)$(br)  $$ brew update$(br)  $$ brew install mise$(br)$(br)See the documentation: https://mise.jdx.dev/getting-started.html)
+endif
+	@mise install
 
-.PHONY: doc
-## Run tests
-doc:
-	@open "http://localhost:6060/pkg/github.com/foomo/hanko-go/"
-	@godoc -http=localhost:6060 -play
+.PHONY: .lefthook
+# Configure git hooks for lefthook
+.lefthook:
+	@lefthook install --reset-hooks-path
 
-.PHONY: test
-## Run tests
-test:
-	@go test -p 1 -coverprofile=coverage.out -race -json ./... | gotestfmt
+### Tasks
+
+.PHONY: check
+## Run lint & tests
+check: tidy generate lint.fix test.race audit
 
 .PHONY: lint
 ## Run linter
 lint:
+	@echo "〉golangci-lint run"
 	@golangci-lint run
 
 .PHONY: lint.fix
 ## Fix lint violations
 lint.fix:
+	@echo "〉golangci-lint run fix"
 	@golangci-lint run --fix
+
+.PHONY: generate
+## Run go generate
+generate:
+	@echo "〉go generate"
+	@go generate ./...
+
+.PHONY: test
+## Run tests
+test:
+	@echo "〉go test"
+	@GO_TEST_TAGS=-skip go test -coverprofile=coverage.out -tags=safe ./...
+
+.PHONY: test.race
+## Run tests with -race
+test.race:
+	@echo "〉go test -race"
+	@GO_TEST_TAGS=-skip go test -coverprofile=coverage.out -tags=safe -race ./...
+
+### Dependencies
 
 .PHONY: tidy
 ## Run go mod tidy
 tidy:
+	@echo "〉go mod tidy"
 	@go mod tidy
 
 .PHONY: outdated
 ## Show outdated direct dependencies
 outdated:
-	@go list -u -m -json all | go-mod-outdated -update -direct
+	@echo "〉go mod outdated"
+	@GOWORK=off go-mod-upgrade --list
 
-.PHONY: generate
-## Generate code
-generate:
-	@go generate ./...
+.PHONY: upgrade
+## Upgrade direct dependencies
+upgrade:
+	@echo "〉go mod upgrade"
+	@GOWORK=off go-mod-upgrade
+	@$(MAKE) tidy
 
-brew:os=$(shell uname -s | tr '[:upper:]' '[:lower:]')
-brew:arch=$(shell arch)
-brew:
-	@mkdir -p bin tmp
-	@curl https://raw.githubusercontent.com/foomo/ownbrew-tap/main/oapi-codegen/oapi-codegen.sh | bash -s -- ${os} ${arch} ${OAPI_CODEGEN_VERSION}
-	@ln -sf oapi-codegen-${OAPI_CODEGEN_VERSION}-${os}-${arch} bin/oapi-codegen
+### Security
 
-## === Utils ===
+.PHONY: audit
+## Run security audit
+audit:
+	@echo "〉security audit"
+	@govulncheck ./...
 
+### Documentation
+
+.PHONY: godocs
+## Open go docs
+godocs:
+	@echo "〉starting go docs"
+	@go doc -http
+
+### Utils
+
+.PHONY: help
+# https://patorjk.com/software/taag/#p=display&f=Future+Smooth&t=hanko-go&x=none&v=4&h=4&w=80&we=false
 ## Show help text
+help: g=\033[0;32m
+help: b=\033[0;34m
+help: w=\033[0;90m
+help: e=\033[0m
 help:
+	@echo "$(g)"
+	@echo "╷ ╷╭─╮╭╮╷╷╭ ╭─╮   ╭─╴╭─╮"
+	@echo "├─┤├─┤│╰┤├┴╮│ │╶─╴│╶╮│ │"
+	@echo "╵ ╵╵ ╵╵ ╵╵ ╵╰─╯   ╰─╯╰─╯"
+	@echo "with ❤ foomo by bestbytes"
+	@echo "$(e)"
+	@echo "$(b)Usage:$(e)\n  make [task]"
 	@awk '{ \
-			if ($$0 ~ /^.PHONY: [a-zA-Z\-\_0-9]+$$/) { \
-				helpCommand = substr($$0, index($$0, ":") + 2); \
-				if (helpMessage) { \
-					printf "\033[36m%-23s\033[0m %s\n", \
-						helpCommand, helpMessage; \
-					helpMessage = ""; \
-				} \
-			} else if ($$0 ~ /^[a-zA-Z\-\_0-9.]+:/) { \
-				helpCommand = substr($$0, 0, index($$0, ":")); \
-				if (helpMessage) { \
-					printf "\033[36m%-23s\033[0m %s\n", \
-						helpCommand, helpMessage"\n"; \
-					helpMessage = ""; \
-				} \
-			} else if ($$0 ~ /^##/) { \
-				if (helpMessage) { \
-					helpMessage = helpMessage"\n                        "substr($$0, 3); \
-				} else { \
-					helpMessage = substr($$0, 3); \
-				} \
-			} else { \
-				if (helpMessage) { \
-					print "\n                        "helpMessage"\n" \
-				} \
-				helpMessage = ""; \
-			} \
-		}' \
-		$(MAKEFILE_LIST)
+		if($$0 ~ /^### /){ \
+			if(help) printf "  %-21s $(w)%s$(e)\n\n", cmd, help; help=""; \
+			printf "$(b)\n%s:$(e)\n", substr($$0,5); \
+		} else if($$0 ~ /^[a-zA-Z0-9._-]+:/){ \
+			cmd = substr($$0, 1, index($$0, ":")-1); \
+			if(help) printf "  %-21s $(w)%s$(e)\n", cmd, help; help=""; \
+		} else if($$0 ~ /^##/){ \
+			help = help ? help "\n                        " substr($$0,3) : substr($$0,3); \
+		} else if(help){ \
+			print "\n                        $(w)" help "$(e)\n"; help=""; \
+		} \
+	}' $(MAKEFILE_LIST)
+	@echo ""
